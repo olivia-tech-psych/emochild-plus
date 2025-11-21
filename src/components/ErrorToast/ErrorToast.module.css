@@ -62,11 +62,13 @@
 }
 
 .fadeIn {
-  animation: slideUp 0.3s ease-out forwards;
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: slideUp var(--transition-medium) ease-out forwards;
 }
 
 .fadeOut {
-  animation: slideDown 0.2s ease-in forwards;
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: slideDown var(--transition-fast) ease-in forwards;
 }
 
 @keyframes slideUp {

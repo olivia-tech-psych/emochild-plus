@@ -30,6 +30,17 @@
   padding: var(--spacing-lg);
   gap: var(--spacing-lg);
   position: relative;
+  /* Requirement 8.2: Smooth page entrance */
+  animation: fadeInPage var(--transition-medium) ease-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .creatureSection {

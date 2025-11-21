@@ -49,11 +49,30 @@
   background: var(--color-bg-secondary);
   border-radius: 8px;
   border-left: 3px solid transparent;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  /* Requirement 8.2, 8.3: Smooth transitions for all state changes */
+  transition: 
+    transform var(--transition-fast), 
+    box-shadow var(--transition-fast),
+    border-left-color var(--transition-fast),
+    background-color var(--transition-fast);
+  /* Add subtle entrance animation */
+  animation: slideInFromLeft var(--transition-medium) ease-out;
 }
 
 .logItem:hover {
   transform: translateX(4px);
+  background: rgba(45, 45, 45, 0.8);
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* Requirement 6.5: Visual indicators for expressed vs suppressed */

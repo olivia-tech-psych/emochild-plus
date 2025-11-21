@@ -60,7 +60,8 @@
   background-color: rgba(255, 212, 163, 0.1);
   border-radius: 8px;
   border: 1px solid rgba(255, 212, 163, 0.3);
-  animation: fadeIn 0.2s ease-in;
+  /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
+  animation: fadeIn var(--transition-fast) ease-in;
 }
 
 @keyframes fadeIn {
