@@ -7,12 +7,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useEmotion } from '@/context/EmotionContext';
 import { EmotionInput } from '@/components/EmotionInput';
 import { ActionButtons } from '@/components/ActionButtons';
 import { Creature } from '@/components/Creature';
 import { SafetyBar } from '@/components/SafetyBar';
+import { Navigation } from '@/components/Navigation';
 import type { EmotionAction } from '@/types';
 import styles from './page.module.css';
 
@@ -83,9 +83,7 @@ export default function Home() {
 
       {/* Navigation to history */}
       <div className={styles.navigationSection}>
-        <Link href="/history" className={styles.historyLink}>
-          View History
-        </Link>
+        <Navigation type="toHistory" />
       </div>
     </main>
   );

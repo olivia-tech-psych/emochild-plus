@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useEmotion } from '@/context/EmotionContext';
 import { LogHistory } from '@/components/LogHistory';
+import { Navigation } from '@/components/Navigation';
 import styles from './page.module.css';
 
 export default function HistoryPage() {
@@ -10,11 +10,9 @@ export default function HistoryPage() {
 
   return (
     <div className={styles.container}>
-      <nav className={styles.navigation}>
-        <Link href="/" className={styles.backLink}>
-          ← Back to Creature
-        </Link>
-      </nav>
+      <div className={styles.navigation}>
+        <Navigation type="toMain" />
+      </div>
       
       <h1 className={styles.title}>Your Emotional Journey</h1>
       
