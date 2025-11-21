@@ -187,3 +187,9 @@ npm run test:watch
 - Verified ARIA attributes (role="alert", aria-live="assertive") for accessibility
 - Ensured validation error only appears when appropriate conditions are met
 - Completed test coverage for Requirement 1.4: Empty input validation
+
+### [2025-11-21 16:45] Creature Animation Polish
+- Enhanced Creature component CSS transitions for smoother visual effects
+- Added box-shadow and background transitions to creature state changes
+- Improved animation smoothness by expanding transition properties
+- Requirements 8.2, 8.3: Polished smooth transitions for all creature state changes
