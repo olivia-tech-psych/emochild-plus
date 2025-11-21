@@ -100,10 +100,10 @@ describe('Property 9: Log display completeness', () => {
             // Check that visual indicators (icons) are present
             const icons = container.querySelectorAll('[aria-label]');
             const hasExpressedIcon = Array.from(icons).some(
-              (icon) => icon.getAttribute('aria-label') === 'expressed'
+              (icon) => icon.getAttribute('aria-label') === 'Expressed emotion'
             );
             const hasSuppressedIcon = Array.from(icons).some(
-              (icon) => icon.getAttribute('aria-label') === 'suppressed'
+              (icon) => icon.getAttribute('aria-label') === 'Suppressed emotion'
             );
             
             // At least one type of icon should be present
