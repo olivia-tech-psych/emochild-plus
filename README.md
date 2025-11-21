@@ -9,7 +9,7 @@ Emotionagotchi is a modern resurrection of the classic Tamagotchi (1996 digital 
 - **Creature State Logic**: Calculation utilities for brightness/size changes based on expressed/suppressed emotions
 - **Global State Management**: React Context API implementation (EmotionContext) for managing application state
 - **Theme System**: Dark pastel color palette with CSS custom properties
-- **EmotionInput Component**: Text input with 100-character limit, real-time character counter, and auto-focus
+- **EmotionInput Component**: Text input with 100-character limit, real-time character counter, auto-focus, and inline validation error display for empty submissions
 - **ActionButtons Component**: Express and Suppress buttons with pastel styling, disabled state handling, and accessibility features
 - **Creature Component**: Animated blob creature with four animation states (idle, grow, curl, celebrate), dynamic brightness filtering, and size scaling based on emotional state
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display
@@ -173,3 +173,9 @@ npm run test:watch
 - Added aria-labelledby to connect progress bar with descriptive label
 - Improved semantic HTML structure for better accessibility compliance
 - Requirement 7.5: Enhanced keyboard accessibility and screen reader support
+
+### [2025-11-21 16:15] EmotionInput Validation Enhancement
+- Added `showEmptyError` prop to EmotionInput component for inline validation feedback
+- Integrated validation error display in main page to show "Share a feeling to continue" message when users attempt empty submissions
+- Enhanced user experience by providing immediate feedback for invalid input attempts
+- Requirement 1.4: Improved empty input validation with visual feedback
