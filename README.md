@@ -14,6 +14,7 @@ Emotionagotchi is a modern resurrection of the classic Tamagotchi (1996 digital 
 - **Creature Component**: Animated blob creature with four animation states (idle, grow, curl, celebrate), dynamic brightness filtering, and size scaling based on emotional state
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display
 - **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, and scrollable list
+- **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
 - **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library
 
@@ -45,6 +46,10 @@ emotionagotchi-app/
 │   │   │   ├── LogHistory.tsx
 │   │   │   ├── LogHistory.test.tsx
 │   │   │   ├── LogHistory.module.css
+│   │   │   └── index.ts
+│   │   ├── Navigation/         # Navigation between pages
+│   │   │   ├── Navigation.tsx
+│   │   │   ├── Navigation.module.css
 │   │   │   └── index.ts
 │   │   └── SafetyBar/          # Inner safety score progress bar
 │   │       ├── SafetyBar.tsx
@@ -152,3 +157,11 @@ npm run test:watch
 - Added scrollable container for long lists of emotion logs
 - Styled with dark pastel theme using mint accent for expressed and muted lavender for suppressed
 - Completed Task 13 from implementation plan
+
+### [2025-11-21 Navigation Component]
+- Implemented Navigation component for seamless navigation between main and history pages
+- Added two navigation types: 'toHistory' (View History link) and 'toMain' (Back to Creature link)
+- Utilized Next.js Link component for smooth client-side transitions without page reloads
+- Styled with pastel colors (lavender for history link, mint for back link)
+- Included hover effects and focus indicators for accessibility
+- Completed Task 15 from implementation plan
