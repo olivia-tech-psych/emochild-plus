@@ -7,6 +7,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useEmotion } from '@/context/EmotionContext';
 import { EmotionInput } from '@/components/EmotionInput';
 import { ActionButtons } from '@/components/ActionButtons';
@@ -78,6 +79,13 @@ export default function Home() {
           onSuppress={handleSuppress}
           disabled={isButtonDisabled}
         />
+      </div>
+
+      {/* Navigation to history */}
+      <div className={styles.navigationSection}>
+        <Link href="/history" className={styles.historyLink}>
+          View History
+        </Link>
       </div>
     </main>
   );
