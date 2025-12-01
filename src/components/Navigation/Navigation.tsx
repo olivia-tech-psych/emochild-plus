@@ -38,7 +38,7 @@ export function Navigation({ type }: NavigationProps) {
 
   return (
     <Link 
-      href="/" 
+      href="/creature" 
       className={styles.backLink}
       aria-label="Return to main page with creature"
     >

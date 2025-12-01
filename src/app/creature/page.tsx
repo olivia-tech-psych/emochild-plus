@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEmotion } from '@/context/EmotionContext';
 import { Creature } from '@/components/Creature';
 import { SafetyBar } from '@/components/SafetyBar';
@@ -169,7 +170,12 @@ export default function CreaturePage() {
 
       {/* Navigation section */}
       <nav className={styles.navigationSection}>
-        <Navigation type="toHistory" />
+        <div className={styles.navigationLinks}>
+          <Link href="/" className={styles.landingLink}>
+            ← Home
+          </Link>
+          <Navigation type="toHistory" />
+        </div>
       </nav>
     </main>
   );
