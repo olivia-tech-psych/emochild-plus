@@ -1,0 +1,229 @@
+/**
+ * SetupForm Component Styles
+ * Dark pastel theme with centered form layout
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--color-bg-primary);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: border-color var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-mint);
+  box-shadow: 0 0 0 3px rgba(201, 228, 222, 0.2);
+}
+
+.input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+/* Preview Blob */
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.previewBlob {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  transition: background var(--transition-medium),
+              box-shadow var(--transition-medium);
+}
+
+/* Color variants for preview blob */
+.blob-mint {
+  background: var(--color-mint);
+  box-shadow: var(--glow-mint);
+}
+
+.blob-blue {
+  background: var(--color-blue);
+  box-shadow: var(--glow-blue);
+}
+
+.blob-lavender {
+  background: var(--color-lavender);
+  box-shadow: var(--glow-lavender);
+}
+
+.blob-peach {
+  background: var(--color-peach);
+  box-shadow: var(--glow-peach);
+}
+
+.blob-pink {
+  background: var(--color-pink);
+  box-shadow: var(--glow-pink);
+}
+
+.blob-yellow {
+  background: var(--color-yellow);
+  box-shadow: var(--glow-yellow);
+}
+
+.blob-red {
+  background: var(--color-red);
+  box-shadow: var(--glow-red);
+}
+
+.blob-orange {
+  background: var(--color-orange);
+  box-shadow: var(--glow-orange);
+}
+
+/* Preview Bow */
+.previewBow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 20px;
+  background: #C11C84;
+  border-radius: 50% 50% 0 0;
+}
+
+.previewBow::before,
+.previewBow::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #C11C84;
+  border-radius: 50%;
+  top: 0;
+}
+
+.previewBow::before {
+  left: -12px;
+}
+
+.previewBow::after {
+  right: -12px;
+}
+
+/* Checkbox */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-pink);
+}
+
+.checkboxText {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+/* Continue Button */
+.continueButton {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-bg-primary);
+  background: var(--color-mint);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform var(--transition-fast),
+              box-shadow var(--transition-fast),
+              opacity var(--transition-fast);
+  margin-top: 1rem;
+}
+
+.continueButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-mint);
+}
+
+.continueButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.continueButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.continueButton:focus-visible {
+  outline: 3px solid var(--color-mint);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .form {
+    max-width: 100%;
+  }
+}
