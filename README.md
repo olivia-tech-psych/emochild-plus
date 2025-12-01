@@ -4,15 +4,18 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 
 ## Current Features Implemented
 
-- **Type System**: Complete TypeScript type definitions for EmotionLog, CreatureState, and AppState
-- **Storage Service**: localStorage-based persistence layer with error handling for logs, creature state, and safety scores
+- **Type System**: Complete TypeScript type definitions including EmotionLog, CreatureState, AppState, CreatureCustomization, PastelColor, and QuickEmotion types
+- **Storage Service**: localStorage-based persistence layer with error handling for logs, creature state, safety scores, customization settings, and micro-sentence index
 - **Creature State Logic**: Calculation utilities for brightness/size changes based on expressed/suppressed emotions
-- **Global State Management**: React Context API implementation (EmotionContext) for managing application state
-- **Theme System**: Dark pastel color palette with CSS custom properties
+- **Global State Management**: React Context API implementation (EmotionContext) with extended state for customization, micro-sentences, and log deletion
+- **Theme System**: Dark pastel color palette with CSS custom properties for 8 pastel colors plus white
+- **Color Mapping Utilities**: Hex color mappings, glow effects, and color transformation functions (dimming/brightening) for all pastel colors
+- **Micro-Sentence System**: Cycling validation messages (10 total) that display when emotions are expressed
 - **EmotionInput Component**: Text input with 100-character limit, real-time character counter, auto-focus, and inline validation error display for empty submissions
 - **ActionButtons Component**: Express and Suppress buttons with pastel styling, disabled state handling, and accessibility features
 - **Creature Component**: Animated blob creature with four animation states (idle, grow, curl, celebrate), dynamic brightness filtering, and size scaling based on emotional state
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display
+- **ColorPicker Component**: Reusable color selector with 8 pastel color swatches plus optional white, keyboard navigation, and accessibility features for creature and text color customization
 - **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, and scrollable list
 - **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
@@ -31,6 +34,11 @@ emochild/
 │   │   ├── ActionButtons/      # Express/Suppress action buttons
 │   │   │   ├── ActionButtons.tsx
 │   │   │   ├── ActionButtons.module.css
+│   │   │   └── index.ts
+│   │   ├── ColorPicker/        # Reusable color selector component
+│   │   │   ├── ColorPicker.tsx
+│   │   │   ├── ColorPicker.test.tsx
+│   │   │   ├── ColorPicker.module.css
 │   │   │   └── index.ts
 │   │   ├── Creature/           # Animated creature component
 │   │   │   ├── Creature.tsx
@@ -64,8 +72,12 @@ emochild/
 │   ├── types/
 │   │   └── index.ts                 # TypeScript type definitions
 │   └── utils/
+│       ├── colorMapping.ts          # Color hex/glow mappings and transformations
+│       ├── colorMapping.test.ts
 │       ├── creatureState.ts         # Creature state calculations
 │       ├── creatureState.test.ts
+│       ├── microSentences.ts        # Micro-sentence cycling logic
+│       ├── microSentences.test.ts
 │       └── contrast.test.ts         # Accessibility tests
 ├── vitest.config.ts
 ├── vitest.setup.ts
@@ -76,9 +88,15 @@ emochild/
 
 This project is being developed using **Kiro Specs**, a structured approach to building features:
 
+**Version 1 (emochild):**
 - **Requirements Document** (`.kiro/specs/emochild/requirements.md`): Defines 10 user stories with acceptance criteria
 - **Design Document** (`.kiro/specs/emochild/design.md`): Specifies architecture, components, and 12 correctness properties for property-based testing
 - **Tasks Document** (`.kiro/specs/emochild/tasks.md`): Breaks implementation into 20 incremental tasks
+
+**Version 2 (emochild-v2):**
+- **Requirements Document** (`.kiro/specs/emochild-v2/requirements.md`): Extends with 8 new user stories for landing page, customization, quick emotions, text colors, and micro-sentences
+- **Design Document** (`.kiro/specs/emochild-v2/design.md`): Adds 20 new correctness properties for enhanced features
+- **Tasks Document** (`.kiro/specs/emochild-v2/tasks.md`): Breaks v2 implementation into 26 incremental tasks
 
 The spec-driven approach ensures:
 - Clear requirements traceability
@@ -203,3 +221,27 @@ npm run test:watch
 - Fixed ARIA label assertions in LogHistory property-based tests to match actual implementation
 - Updated test expectations from 'expressed'/'suppressed' to 'Expressed emotion'/'Suppressed emotion'
 - Ensures test accuracy and alignment with component accessibility features
+
+### [2025-12-01 14:30] Version 2 Foundation - Extended Type System & Utilities
+- Extended type definitions with CreatureCustomization, PastelColor, QuickEmotion types
+- Updated EmotionLog interface with textColor and quickEmotion fields
+- Updated AppState interface with customization and microSentenceIndex
+- Implemented colorMapping utility with hex/glow mappings and color transformation functions (dimming/brightening)
+- Implemented microSentences utility with 10 validation messages and cycling logic
+- Extended storageService with saveCustomization, loadCustomization, saveMicroSentenceIndex, loadMicroSentenceIndex methods
+- Added migration logic for existing logs without new fields (defaults textColor to white)
+- Extended EmotionContext with customization state, micro-sentence tracking, deleteLog method, and getNextMicroSentence
+- Comprehensive test coverage for all new utilities and context methods
+- Completed Tasks 1-6 from emochild-v2 implementation plan
+- Requirements: 2.6, 3.2, 4.1, 4.3, 5.1, 5.2, 5.3, 6.4, 6.5, 7.3, 7.5, 8.1, 8.3, 8.4
+
+### [2025-12-01 15:00] ColorPicker Component Implementation
+- Implemented ColorPicker component with 8 pastel color swatches (mint, blue, lavender, peach, pink, yellow, red, orange)
+- Added optional white color support for text color selection via includeWhite prop
+- Implemented keyboard navigation with Arrow keys for accessibility
+- Added visual selection indicators with checkmark for selected color
+- Implemented radiogroup ARIA pattern with proper roles and labels
+- Styled with CSS modules matching dark pastel theme
+- Comprehensive unit tests covering color selection, keyboard navigation, and accessibility
+- Completed Task 7 from emochild-v2 implementation plan
+- Requirements: 2.4, 4.1, 4.2
