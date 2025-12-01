@@ -11,7 +11,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **Theme System**: Dark pastel color palette with CSS custom properties for 8 pastel colors plus white
 - **Color Mapping Utilities**: Hex color mappings, glow effects, and color transformation functions (dimming/brightening) for all pastel colors
 - **Micro-Sentence System**: Cycling validation messages (10 total) that display when emotions are expressed
-- **EmotionInput Component**: Text input with 100-character limit, real-time character counter, auto-focus, and inline validation error display for empty submissions
+- **EmotionInput Component**: Text input with 100-character limit, real-time character counter, auto-focus, inline validation error display for empty submissions, ColorPicker integration for text color selection, and support for quick emotion prefilling with initialText prop
 - **ActionButtons Component**: Express and Suppress buttons with pastel styling, disabled state handling, and accessibility features
 - **Creature Component**: Animated blob creature with four animation states (idle, grow, curl, celebrate), dynamic brightness filtering, and size scaling based on emotional state
 - **SafetyBar Component**: Progress bar displaying inner safety score with mint-colored fill, smooth growth animation, and numeric score display

@@ -199,6 +199,110 @@ describe('EmotionInput', () => {
   });
 
   /**
+   * Test: Initial text prefilling
+   * Requirement 3.3: Accept initialText prop for quick emotion prefilling
+   */
+  it('should prefill input with initialText when provided', () => {
+    const onChange = vi.fn();
+    const initialText = 'stressed';
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        initialText={initialText}
+      />
+    );
+
+    // Should call onChange with the initial text
+    expect(onChange).toHaveBeenCalledWith(initialText);
+  });
+
+  /**
+   * Test: Character counter with prefilled text
+   * Requirement 3.4: Maintain character counter with prefilled text
+   */
+  it('should update character counter with prefilled text', () => {
+    const onChange = vi.fn();
+    const initialText = 'anxious';
+    
+    render(
+      <EmotionInput 
+        value={initialText} 
+        onChange={onChange} 
+        maxLength={100}
+        initialText={initialText}
+      />
+    );
+
+    const remaining = 100 - initialText.length;
+    expect(screen.getByText(`${remaining}/100`)).toBeInTheDocument();
+  });
+
+  /**
+   * Test: Text color application
+   * Requirement 4.2: Apply text color to input field
+   */
+  it('should apply text color to textarea', () => {
+    const onChange = vi.fn();
+    const onTextColorChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="test" 
+        onChange={onChange} 
+        maxLength={100}
+        textColor="mint"
+        onTextColorChange={onTextColorChange}
+      />
+    );
+
+    const textarea = screen.getByRole('textbox', { name: /emotion log input/i });
+    expect(textarea).toHaveStyle({ color: 'var(--color-mint)' });
+  });
+
+  /**
+   * Test: ColorPicker integration
+   * Requirement 4.2: Integrate ColorPicker for text color selection
+   */
+  it('should render ColorPicker when onTextColorChange is provided', () => {
+    const onChange = vi.fn();
+    const onTextColorChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+        textColor="white"
+        onTextColorChange={onTextColorChange}
+      />
+    );
+
+    // ColorPicker should be present
+    expect(screen.getByText('Text color')).toBeInTheDocument();
+  });
+
+  /**
+   * Test: ColorPicker not rendered without callback
+   */
+  it('should not render ColorPicker when onTextColorChange is not provided', () => {
+    const onChange = vi.fn();
+    
+    render(
+      <EmotionInput 
+        value="" 
+        onChange={onChange} 
+        maxLength={100}
+      />
+    );
+
+    // ColorPicker should not be present
+    expect(screen.queryByText('Text color')).not.toBeInTheDocument();
+  });
+
+  /**
    * Error condition tests
    * Requirement 1.4: Empty input validation
    */
