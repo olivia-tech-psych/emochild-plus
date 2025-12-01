@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { storageService } from './storageService';
-import { EmotionLog, CreatureState } from '@/types';
+import { EmotionLog, CreatureState, CreatureCustomization } from '@/types';
 
 describe('storageService', () => {
   beforeEach(() => {
@@ -21,6 +21,8 @@ describe('storageService', () => {
           text: 'Feeling happy',
           action: 'expressed',
           timestamp: Date.now(),
+          textColor: 'mint',
+          quickEmotion: 'excited',
         },
       ];
 
@@ -88,14 +90,139 @@ describe('storageService', () => {
     });
   });
 
+  describe('saveCustomization and loadCustomization', () => {
+    it('should save and load creature customization', () => {
+      const customization: CreatureCustomization = {
+        name: 'Fluffy',
+        color: 'mint',
+        hasBow: true,
+      };
+
+      storageService.saveCustomization(customization);
+      const loaded = storageService.loadCustomization();
+
+      expect(loaded).toEqual(customization);
+    });
+
+    it('should return null when no customization exists', () => {
+      const loaded = storageService.loadCustomization();
+      expect(loaded).toBeNull();
+    });
+
+    it('should handle corrupted data gracefully', () => {
+      localStorage.setItem('emochild_customization', 'invalid json');
+      const loaded = storageService.loadCustomization();
+      expect(loaded).toBeNull();
+    });
+
+    it('should handle invalid customization structure', () => {
+      localStorage.setItem('emochild_customization', '{"invalid": "structure"}');
+      const loaded = storageService.loadCustomization();
+      expect(loaded).toBeNull();
+    });
+  });
+
+  describe('saveMicroSentenceIndex and loadMicroSentenceIndex', () => {
+    it('should save and load micro-sentence index', () => {
+      storageService.saveMicroSentenceIndex(5);
+      const loaded = storageService.loadMicroSentenceIndex();
+
+      expect(loaded).toBe(5);
+    });
+
+    it('should return 0 when no index exists', () => {
+      const loaded = storageService.loadMicroSentenceIndex();
+      expect(loaded).toBe(0);
+    });
+
+    it('should handle corrupted data gracefully', () => {
+      localStorage.setItem('emochild_micro_index', 'not a number');
+      const loaded = storageService.loadMicroSentenceIndex();
+      expect(loaded).toBe(0);
+    });
+  });
+
+  describe('logs migration', () => {
+    it('should migrate existing logs without textColor to default white', () => {
+      const oldLogs = [
+        {
+          id: '123',
+          text: 'Old log without color',
+          action: 'expressed',
+          timestamp: Date.now(),
+        },
+      ];
+
+      localStorage.setItem('emochild_logs', JSON.stringify(oldLogs));
+      const loaded = storageService.loadLogs();
+
+      expect(loaded[0].textColor).toBe('white');
+      expect(loaded[0].text).toBe('Old log without color');
+    });
+
+    it('should preserve textColor for logs that have it', () => {
+      const newLogs: EmotionLog[] = [
+        {
+          id: '123',
+          text: 'New log with color',
+          action: 'expressed',
+          timestamp: Date.now(),
+          textColor: 'mint',
+        },
+      ];
+
+      storageService.saveLogs(newLogs);
+      const loaded = storageService.loadLogs();
+
+      expect(loaded[0].textColor).toBe('mint');
+    });
+
+    it('should preserve quickEmotion when present', () => {
+      const logsWithQuickEmotion: EmotionLog[] = [
+        {
+          id: '123',
+          text: 'anxious',
+          action: 'expressed',
+          timestamp: Date.now(),
+          textColor: 'blue',
+          quickEmotion: 'anxious',
+        },
+      ];
+
+      storageService.saveLogs(logsWithQuickEmotion);
+      const loaded = storageService.loadLogs();
+
+      expect(loaded[0].quickEmotion).toBe('anxious');
+    });
+
+    it('should handle logs without quickEmotion', () => {
+      const logsWithoutQuickEmotion: EmotionLog[] = [
+        {
+          id: '123',
+          text: 'Custom emotion text',
+          action: 'expressed',
+          timestamp: Date.now(),
+          textColor: 'lavender',
+        },
+      ];
+
+      storageService.saveLogs(logsWithoutQuickEmotion);
+      const loaded = storageService.loadLogs();
+
+      expect(loaded[0].quickEmotion).toBeUndefined();
+    });
+  });
+
   describe('clearAll', () => {
-    it('should clear all stored data', () => {
+    it('should clear all stored data including new fields', () => {
       const logs: EmotionLog[] = [
         {
           id: '123',
           text: 'Test',
           action: 'expressed',
           timestamp: Date.now(),
+          textColor: 'mint',
+          quickEmotion: 'calm',
         },
       ];
       const state: CreatureState = {
@@ -103,16 +230,25 @@ describe('storageService', () => {
         size: 50,
         animation: 'idle',
       };
+      const customization: CreatureCustomization = {
+        name: 'Fluffy',
+        color: 'blue',
+        hasBow: true,
+      };
 
       storageService.saveLogs(logs);
       storageService.saveCreatureState(state);
       storageService.saveSafetyScore(10);
+      storageService.saveCustomization(customization);
+      storageService.saveMicroSentenceIndex(3);
 
       storageService.clearAll();
 
       expect(storageService.loadLogs()).toEqual([]);
       expect(storageService.loadCreatureState()).toBeNull();
       expect(storageService.loadSafetyScore()).toBe(0);
+      expect(storageService.loadCustomization()).toBeNull();
+      expect(storageService.loadMicroSentenceIndex()).toBe(0);
     });
   });
 
@@ -188,7 +324,7 @@ describe('storageService', () => {
       it('should handle quota exceeded error', () => {
         // First, allow the availability check to pass, then throw on actual setItem
         let callCount = 0;
-        Storage.prototype.setItem = vi.fn((key: string) => {
+        Storage.prototype.setItem = vi.fn(() => {
           callCount++;
           // First call is the availability check, let it pass
           if (callCount === 1) {
@@ -233,6 +369,40 @@ describe('storageService', () => {
 
         const score = storageService.loadSafetyScore();
         expect(score).toBe(0);
+
+        const customization = storageService.loadCustomization();
+        expect(customization).toBeNull();
+
+        const index = storageService.loadMicroSentenceIndex();
+        expect(index).toBe(0);
+      });
+
+      it('should handle localStorage.setItem failure for customization', () => {
+        Storage.prototype.setItem = vi.fn(() => {
+          throw new Error('Storage unavailable');
+        });
+
+        const customization: CreatureCustomization = {
+          name: 'Test',
+          color: 'mint',
+          hasBow: false,
+        };
+
+        const result = storageService.saveCustomization(customization);
+
+        expect(result.success).toBe(false);
+        expect(result.error).toBeDefined();
+      });
+
+      it('should handle localStorage.setItem failure for micro-sentence index', () => {
+        Storage.prototype.setItem = vi.fn(() => {
+          throw new Error('Storage unavailable');
+        });
+
+        const result = storageService.saveMicroSentenceIndex(5);
+
+        expect(result.success).toBe(false);
+        expect(result.error).toBeDefined();
       });
     });
 
