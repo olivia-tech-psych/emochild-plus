@@ -56,6 +56,12 @@ export default function CreaturePage() {
     }
   }, [customization, router]);
 
+  // Ensure micro-sentence is hidden on mount/refresh
+  useEffect(() => {
+    setShowMicroSentence(false);
+    setDisplayedSentence('');
+  }, []);
+
   // Don't render if no customization (will redirect)
   if (!customization.name) {
     return null;
