@@ -5,6 +5,10 @@
   justify-content: center;
   margin: 1rem 0;
   animation: fadeInOut 2s ease-in-out forwards;
+  /* Enable hardware acceleration for smooth animation */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .sentence {
@@ -18,6 +22,8 @@
               0 0 30px rgba(160, 210, 235, 0.3),
               0 0 40px rgba(219, 205, 240, 0.2);
   max-width: 90%;
+  /* Smooth transitions for any dynamic changes */
+  transition: box-shadow var(--transition-medium);
 }
 
 .dismissButton {
@@ -45,21 +51,22 @@
   border-radius: 4px;
 }
 
+/* Requirement 5.5: Smooth fade in/out animation for micro-sentences */
 @keyframes fadeInOut {
   0% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(0.95);
   }
   10% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
   90% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-10px) scale(0.95);
   }
 }

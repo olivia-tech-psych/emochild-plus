@@ -81,23 +81,23 @@ a {
   text-decoration: none;
 }
 
-/* Micro-sentence fade in/out animation */
+/* Micro-sentence fade in/out animation - Requirement 5.5 */
 @keyframes fadeInOut {
   0% { 
     opacity: 0; 
-    transform: translateY(-10px); 
+    transform: translateY(-10px) scale(0.95); 
   }
   10% { 
     opacity: 1; 
-    transform: translateY(0); 
+    transform: translateY(0) scale(1); 
   }
   90% { 
     opacity: 1; 
-    transform: translateY(0); 
+    transform: translateY(0) scale(1); 
   }
   100% { 
     opacity: 0; 
-    transform: translateY(-10px); 
+    transform: translateY(-10px) scale(0.95); 
   }
 }
 

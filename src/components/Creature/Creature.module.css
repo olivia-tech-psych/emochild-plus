@@ -17,11 +17,17 @@
   position: relative;
   /* Requirement 8.2, 8.3: Smooth transitions for all state changes */
   /* Requirement 6.4, 6.5: Transitions maintain color while dimming/brightening */
+  /* Use GPU-accelerated properties for better performance */
   transition: 
     filter var(--transition-slow),
     transform var(--transition-slow),
     box-shadow var(--transition-slow),
     background var(--transition-slow);
+  /* Enable hardware acceleration */
+  will-change: transform, filter;
+  /* Smooth rendering */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Eyes */
@@ -57,6 +63,8 @@
 .creatureIdle {
   /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
   animation: breathe 3s ease-in-out infinite;
+  /* Smooth animation performance */
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Grow animation for expressed emotions - Requirement 3.1 */
@@ -78,6 +86,8 @@
 .creatureGrow {
   /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
   animation: grow var(--transition-slow) ease-out forwards;
+  /* Smooth animation with custom easing */
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Curl animation for suppressed emotions - Requirement 3.2 */
@@ -99,6 +109,8 @@
 .creatureCurl {
   /* Requirement 3.3, 8.2: Use CSS custom properties for timing */
   animation: curl var(--transition-slow) ease-out forwards;
+  /* Smooth animation with custom easing */
+  animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
 }
 
 /* Celebrate animation for maximum brightness - Requirement 3.4 */
@@ -125,6 +137,8 @@
   animation: celebrate var(--transition-slow) ease-in-out forwards;
   filter: brightness(1.5);
   box-shadow: var(--glow-mint), var(--glow-lavender);
+  /* Smooth bouncy animation */
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* Bow accessory - Requirement 6.2 */
