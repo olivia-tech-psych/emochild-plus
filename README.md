@@ -20,7 +20,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **SetupForm Component**: Creature customization form with name input (50 character limit), ColorPicker integration, real-time preview blob that updates with selected color, optional bow toggle checkbox, form validation, and support for both initial setup and editing modes with initialCustomization prop
 - **QuickEmotions Component**: Grid of 10 quick emotion buttons (stressed, anxious, calm, excited, sad, angry, confused, grateful, curious, scared) with pastel color styling, keyboard navigation support, and accessibility features for faster emotion logging
 - **MicroSentence Component**: Displays encouraging validation messages when emotions are expressed, with fade-in/out animation, auto-dismiss after 2 seconds, manual dismissal option, and soft pastel glow effect for emotional support
-- **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, scrollable list, text color rendering from saved logs, delete functionality with confirmation dialog, and pastel dividers between entries
+- **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, scrollable list, text color rendering from saved logs, delete functionality with confirmation dialog, edit functionality for log text, CSV export feature with UTF-8 BOM for proper emoji encoding, and pastel dividers between entries
 - **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
 - **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library
@@ -409,3 +409,15 @@ npm run test:watch
 - Enables users to modify creature name, color, and bow accessory after initial setup
 - Form now supports both creation and update workflows with same component
 - Requirement 2.7: Provides way to change creature customization later
+
+### [2025-12-02 20:30] LogHistory CSV Export and Edit Features
+- Added CSV export functionality to LogHistory component with "Export to CSV" button
+- CSV export includes all log fields: timestamp, date, time, emotion text, action, emoji, text color, and quick emotion
+- Implemented UTF-8 BOM (Byte Order Mark) for proper emoji encoding in exported CSV files
+- CSV files are properly escaped for special characters (quotes, commas) to ensure data integrity
+- Export filename includes timestamp for easy organization (e.g., emochild-logs-1234567890.csv)
+- Added edit functionality allowing users to modify emotion log text after creation
+- Edit mode displays textarea with current text and Save/Cancel buttons
+- Text color is preserved during editing for visual consistency
+- Edit feature maintains character limit validation and updates localStorage immediately
+- Enhanced user control over emotion log history with both export and edit capabilities

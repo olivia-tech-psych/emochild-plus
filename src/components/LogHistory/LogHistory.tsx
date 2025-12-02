@@ -155,10 +155,11 @@ export function LogHistory({ logs, onDelete, onEdit }: LogHistoryProps) {
       return `${log.timestamp},${dateStr},${timeStr},${escapedText},${log.action},${emoji},${textColor},${quickEmotion}`;
     }).join('\n');
     
-    // Combine header and rows
-    const csv = header + rows;
+    // Combine header and rows with UTF-8 BOM for proper emoji encoding
+    const BOM = '\uFEFF';
+    const csv = BOM + header + rows;
     
-    // Create blob and download
+    // Create blob with UTF-8 encoding
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
