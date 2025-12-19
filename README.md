@@ -28,6 +28,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **Extended Type System**: Added JournalEntry, JournalPage, PromptTrack, Prompt, EmotionalPattern, ChartData, TimeRange, and AnalyticsPreferences types for advanced features
 - **JournalSpread Component**: Two-page journal interface with cozy stationery aesthetic, dark pink borders, handwriting-style font (Kalam), tilde placeholders for empty content, date headers with day-of-year display, real-time word count calculation and display, and responsive design
 - **PageCurl Component**: Animated navigation buttons for journal pages with realistic curl effects, ripple feedback, direction-specific animations, accessibility support, and reduced motion compatibility
+- **EmotionLinker Component**: Interactive component for connecting journal entries with same-day emotions, featuring collapsible interface, visual indicators for linked/unlinked emotions, accessibility support, and emotion metadata display
 - **Journal Utilities**: Comprehensive date calculations with leap year support, word count calculation, journal entry creation/updating, date range filtering, and CSV export functionality
 - **Storage Service V3**: Extended storage layer supporting journal entries, prompt tracks, prompts, and analytics preferences with backward compatibility to V2 data
 - **Migration Service**: Automatic data migration from V2 to V3 format with error handling, data validation, and seamless upgrade path for existing users
@@ -73,7 +74,12 @@ emochild/
 │   │   │   └── index.ts
 │   │   ├── QuickEmotions/           # Quick emotion buttons for faster logging
 │   │   ├── SafetyBar/               # Inner safety score progress bar
-│   │   └── SetupForm/               # Creature customization form
+│   │   ├── SetupForm/               # Creature customization form
+│   │   └── EmotionLinker/           # Emotion-to-journal linking component (V3)
+│   │       ├── EmotionLinker.tsx
+│   │       ├── EmotionLinker.test.tsx
+│   │       ├── EmotionLinker.module.css
+│   │       └── index.ts
 │   ├── context/
 │   │   ├── EmotionContext.tsx                    # Global state management
 │   │   ├── EmotionContext.test.tsx

@@ -7,25 +7,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi, describe, it, beforeEach } from 'vitest';
 import { JournalSpread } from './JournalSpread';
 import { JournalEntry } from '@/types';
-
-import { vi } from 'vitest';
-import { it } from 'node:test';
-import { describe } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { describe } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { describe } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { it } from 'node:test';
-import { describe } from 'node:test';
-import { beforeEach } from 'node:test';
-import { describe } from 'node:test';
 
 // Mock PageCurl component
 vi.mock('../PageCurl', () => ({
@@ -159,6 +143,12 @@ describe('JournalSpread - Entry Creation and Editing', () => {
     };
 
     it('should load existing entry content for editing', () => {
+      // Mock emotions that match the linked emotion IDs and are from the same day
+      const mockEmotions = [
+        { id: 'grateful', text: 'grateful', action: 'expressed', timestamp: mockDate.getTime() },
+        { id: 'calm', text: 'calm', action: 'expressed', timestamp: mockDate.getTime() }
+      ];
+
       render(
         <JournalSpread
           currentDate={mockDate}
@@ -170,19 +160,27 @@ describe('JournalSpread - Entry Creation and Editing', () => {
           canTurnNext={true}
           canTurnPrevious={true}
           linkedEmotions={existingEntry.linkedEmotions}
+          allEmotions={mockEmotions}
+          onToggleEmotion={vi.fn()}
         />
       );
 
       const textarea = screen.getByLabelText(/journal entry content/i);
       expect(textarea).toHaveValue(existingEntry.content);
       
-      // Should show linked emotions
-      expect(screen.getByText('grateful')).toBeInTheDocument();
-      expect(screen.getByText('calm')).toBeInTheDocument();
+      // Should show linked emotions in the emotion linker
+      expect(screen.getAllByText('grateful')).toHaveLength(2); // Once in list, once in linked emotions
+      expect(screen.getAllByText('calm')).toHaveLength(2); // Once in list, once in linked emotions
     });
 
     it('should allow editing existing entry content', async () => {
       const user = userEvent.setup();
+      
+      // Mock emotions that match the linked emotion IDs and are from the same day
+      const mockEmotions = [
+        { id: 'grateful', text: 'grateful', action: 'expressed', timestamp: mockDate.getTime() },
+        { id: 'calm', text: 'calm', action: 'expressed', timestamp: mockDate.getTime() }
+      ];
       
       render(
         <JournalSpread
@@ -195,6 +193,8 @@ describe('JournalSpread - Entry Creation and Editing', () => {
           canTurnNext={true}
           canTurnPrevious={true}
           linkedEmotions={existingEntry.linkedEmotions}
+          allEmotions={mockEmotions}
+          onToggleEmotion={vi.fn()}
         />
       );
 
@@ -212,7 +212,7 @@ describe('JournalSpread - Entry Creation and Editing', () => {
       const saveButton = screen.getByRole('button', { name: /save journal entry/i });
       await user.click(saveButton);
 
-      // Verify onSave was called with updated content
+      // Verify onSave was called with updated content and linked emotions
       expect(mockOnSave).toHaveBeenCalledWith(newContent, existingEntry.linkedEmotions);
     });
 

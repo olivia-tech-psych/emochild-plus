@@ -6,23 +6,33 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { JournalSpread } from '@/components/JournalSpread';
 import { JournalEntry } from '@/types';
+import { useEmotion } from '@/context/EmotionContext';
 import styles from './page.module.css';
 
 export default function JournalPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isEditing, setIsEditing] = useState(false);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
+  const [linkedEmotions, setLinkedEmotions] = useState<string[]>([]);
+  
+  // Get emotions from context
+  const { logs: allEmotions } = useEmotion();
 
   // Find entry for current date
   const currentEntry = entries.find(entry => 
     entry.date.toDateString() === currentDate.toDateString()
   );
+  
+  // Update linked emotions when entry changes
+  React.useEffect(() => {
+    setLinkedEmotions(currentEntry?.linkedEmotions || []);
+  }, [currentEntry]);
 
   // Handle saving an entry with validation
-  const handleSave = (content: string, linkedEmotions: string[] = []) => {
+  const handleSave = useCallback((content: string, entryLinkedEmotions: string[] = []) => {
     // Validate content
     if (!content.trim()) {
       console.warn('Cannot save empty journal entry');
@@ -37,7 +47,7 @@ export default function JournalPage() {
       date: new Date(currentDate),
       createdAt: currentEntry?.createdAt || new Date(),
       updatedAt: new Date(),
-      linkedEmotions,
+      linkedEmotions: entryLinkedEmotions,
       wordCount,
       tags: [],
       dayOfYear: Math.floor((currentDate.getTime() - new Date(currentDate.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
@@ -56,10 +66,21 @@ export default function JournalPage() {
     }
     
     setIsEditing(false);
-  };
+  }, [currentEntry, currentDate]);
+
+  // Handle emotion linking toggle
+  const handleToggleEmotion = useCallback((emotionId: string) => {
+    setLinkedEmotions(prev => {
+      if (prev.includes(emotionId)) {
+        return prev.filter(id => id !== emotionId);
+      } else {
+        return [...prev, emotionId];
+      }
+    });
+  }, []);
 
   // Handle page turning
-  const handlePageTurn = (direction: 'next' | 'previous') => {
+  const handlePageTurn = useCallback((direction: 'next' | 'previous') => {
     const newDate = new Date(currentDate);
     if (direction === 'next') {
       newDate.setDate(newDate.getDate() + 1);
@@ -68,7 +89,7 @@ export default function JournalPage() {
     }
     setCurrentDate(newDate);
     setIsEditing(false);
-  };
+  }, [currentDate]);
 
   // Check if we can turn pages
   const today = new Date();
@@ -105,12 +126,14 @@ export default function JournalPage() {
         currentDate={currentDate}
         entry={currentEntry}
         isEditing={isEditing}
-        onSave={handleSave}
+        onSave={(content) => handleSave(content, linkedEmotions)}
         onCancel={() => setIsEditing(false)}
         onPageTurn={handlePageTurn}
         canTurnNext={canTurnNext}
         canTurnPrevious={canTurnPrevious}
-        linkedEmotions={currentEntry?.linkedEmotions || []}
+        linkedEmotions={linkedEmotions}
+        onToggleEmotion={handleToggleEmotion}
+        allEmotions={allEmotions}
       />
 
       <div className={styles.stats}>

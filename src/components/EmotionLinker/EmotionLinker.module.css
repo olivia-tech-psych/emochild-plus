@@ -1,0 +1,293 @@
+/**
+ * EmotionLinker Component Styles
+ * Cozy, journal-themed styling for emotion linking interface
+ * Requirements: 1.5
+ */
+
+.emotionLinker {
+  background: var(--color-journal-page, #F8E8ED);
+  border: 2px solid var(--color-journal-binding, #D4567A);
+  border-radius: 12px;
+  padding: var(--spacing-md, 16px);
+  margin: var(--spacing-sm, 12px) 0;
+  font-family: var(--font-kalam), Kalam, cursive, sans-serif;
+}
+
+.emotionLinkerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm, 12px);
+}
+
+.emotionLinkerTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-journal-binding, #D4567A);
+  margin: 0;
+}
+
+.toggleButton {
+  background: transparent;
+  border: 1px solid var(--color-journal-binding, #D4567A);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--color-journal-binding, #D4567A);
+  cursor: pointer;
+  font-family: var(--font-kalam), Kalam, cursive, sans-serif;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: var(--color-journal-binding, #D4567A);
+  color: var(--color-journal-page, #F8E8ED);
+}
+
+.toggleButton:focus {
+  outline: 2px solid var(--color-journal-binding, #D4567A);
+  outline-offset: 2px;
+}
+
+.emotionLinkerContent {
+  transition: all 0.3s ease;
+}
+
+.emotionLinkerContent.collapsed {
+  display: none;
+}
+
+.emotionLinkerContent.expanded {
+  display: block;
+}
+
+.noEmotionsMessage {
+  color: #8B6F7D;
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-md, 16px);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  border: 1px dashed #C4A4B0;
+}
+
+.emotionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--spacing-xs, 8px) 0;
+}
+
+.emotionItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  padding: var(--spacing-xs, 8px);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.emotionItem:hover {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: var(--color-journal-binding, #D4567A);
+}
+
+.emotionItem.linked {
+  background: #E5C2D1;
+  border-color: var(--color-journal-binding, #D4567A);
+}
+
+.emotionCheckbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-journal-binding, #D4567A);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.emotionCheckbox:checked {
+  background: var(--color-journal-binding, #D4567A);
+}
+
+.emotionCheckbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.emotionCheckbox:focus {
+  outline: 2px solid var(--color-journal-binding, #D4567A);
+  outline-offset: 2px;
+}
+
+.emotionDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.emotionText {
+  font-size: 14px;
+  color: #5A3A4A;
+  margin: 0 0 2px 0;
+  word-wrap: break-word;
+}
+
+.emotionMeta {
+  font-size: 12px;
+  color: #8B6F7D;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+}
+
+.emotionAction {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.emotionAction.expressed {
+  background: #C8E6C9;
+  color: #2E7D32;
+}
+
+.emotionAction.suppressed {
+  background: #FFCDD2;
+  color: #C62828;
+}
+
+.emotionTime {
+  color: #8B6F7D;
+}
+
+.linkedEmotionsDisplay {
+  margin-top: var(--spacing-sm, 12px);
+  padding: var(--spacing-sm, 12px);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  border: 1px solid #E0C4D1;
+}
+
+.linkedEmotionsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-journal-binding, #D4567A);
+  margin: 0 0 var(--spacing-xs, 8px) 0;
+}
+
+.linkedEmotionsTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs, 8px);
+}
+
+.linkedEmotionTag {
+  background: #E5C2D1;
+  color: #5A3A4A;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.removeEmotionButton {
+  background: none;
+  border: none;
+  color: #8B6F7D;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.removeEmotionButton:hover {
+  background: #C4A4B0;
+  color: white;
+}
+
+.removeEmotionButton:focus {
+  outline: 2px solid var(--color-journal-binding, #D4567A);
+  outline-offset: 1px;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .emotionLinker {
+    padding: var(--spacing-sm, 12px);
+    margin: var(--spacing-xs, 8px) 0;
+  }
+  
+  .emotionLinkerTitle {
+    font-size: 14px;
+  }
+  
+  .toggleButton {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+  
+  .emotionItem {
+    padding: var(--spacing-xs, 8px);
+  }
+  
+  .emotionText {
+    font-size: 13px;
+  }
+  
+  .emotionMeta {
+    font-size: 11px;
+  }
+  
+  .linkedEmotionTag {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .emotionLinker {
+    border-width: 3px;
+  }
+  
+  .emotionItem {
+    border-width: 2px;
+  }
+  
+  .emotionCheckbox {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .emotionLinkerContent,
+  .emotionItem,
+  .toggleButton,
+  .removeEmotionButton {
+    transition: none;
+  }
+}

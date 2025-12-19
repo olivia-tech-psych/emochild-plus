@@ -5,8 +5,10 @@
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { JournalEntry, JournalPage } from '@/types';
+import { JournalEntry, EmotionLog } from '@/types';
 import { PageCurl } from '../PageCurl';
+import { EmotionLinker } from '../EmotionLinker';
+import { getSameDayEmotions } from '@/utils/journalUtils';
 import styles from './JournalSpread.module.css';
 
 export interface JournalSpreadProps {
@@ -30,6 +32,8 @@ export interface JournalSpreadProps {
   linkedEmotions?: string[];
   /** Callback when toggling emotion links */
   onToggleEmotion?: (emotionId: string) => void;
+  /** All available emotions for linking */
+  allEmotions?: EmotionLog[];
 }
 
 /**
@@ -57,9 +61,13 @@ export function JournalSpread({
   canTurnNext,
   canTurnPrevious,
   linkedEmotions = [],
-  onToggleEmotion
+  onToggleEmotion,
+  allEmotions = []
 }: JournalSpreadProps) {
   const [editContent, setEditContent] = useState(entry?.content || '');
+  
+  // Get same-day emotions for linking
+  const sameDayEmotions = getSameDayEmotions(allEmotions, currentDate);
   
   // Calculate word count for current edit content
   const currentWordCount = editContent.trim() 
@@ -123,9 +131,6 @@ export function JournalSpread({
     return tildes;
   };
 
-  // Check if current date is today
-  const isToday = currentDate.toDateString() === new Date().toDateString();
-  
   // Check if current date is in the future
   const isFuture = currentDate > new Date();
 
@@ -254,8 +259,20 @@ export function JournalSpread({
           </div>
           
           <div className={styles.pageContent}>
-            {entry && linkedEmotions.length > 0 ? (
-              <div role="region" aria-label="Linked emotions for this entry">
+            {/* Emotion Linking Section */}
+            {(isEditing || sameDayEmotions.length > 0) && onToggleEmotion && (
+              <EmotionLinker
+                availableEmotions={sameDayEmotions}
+                linkedEmotions={linkedEmotions}
+                onToggleEmotion={onToggleEmotion}
+                initiallyCollapsed={!isEditing}
+                date={currentDate}
+              />
+            )}
+            
+            {/* Linked Emotions Display (when not editing and has linked emotions) */}
+            {!isEditing && entry && linkedEmotions.length > 0 && (
+              <div role="region" aria-label="Linked emotions for this entry" style={{ marginTop: 'var(--spacing-sm)' }}>
                 <h4 style={{ 
                   fontFamily: 'var(--font-kalam), Kalam, cursive, sans-serif', 
                   color: 'var(--color-journal-binding)', 
@@ -269,26 +286,33 @@ export function JournalSpread({
                   flexWrap: 'wrap', 
                   gap: 'var(--spacing-xs)' 
                 }}>
-                  {linkedEmotions.map((emotionId, index) => (
-                    <span 
-                      key={emotionId}
-                      style={{
-                        background: '#E5C2D1',
-                        color: '#5A3A4A',
-                        padding: '4px 8px',
-                        borderRadius: '12px',
-                        fontSize: '14px',
-                        fontFamily: 'var(--font-kalam), Kalam, cursive, sans-serif'
-                      }}
-                      role="listitem"
-                      aria-label={`Linked emotion ${index + 1}`}
-                    >
-                      {emotionId}
-                    </span>
-                  ))}
+                  {linkedEmotions.map((emotionId, index) => {
+                    const emotion = allEmotions.find(e => e.id === emotionId);
+                    return (
+                      <span 
+                        key={emotionId}
+                        style={{
+                          background: '#E5C2D1',
+                          color: '#5A3A4A',
+                          padding: '4px 8px',
+                          borderRadius: '12px',
+                          fontSize: '14px',
+                          fontFamily: 'var(--font-kalam), Kalam, cursive, sans-serif'
+                        }}
+                        role="listitem"
+                        aria-label={`Linked emotion ${index + 1}: ${emotion?.text || emotionId}`}
+                        title={emotion?.text || emotionId}
+                      >
+                        {emotion?.text || emotionId}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
-            ) : (
+            )}
+            
+            {/* Empty state when no emotions and not editing */}
+            {!isEditing && sameDayEmotions.length === 0 && linkedEmotions.length === 0 && (
               <div className={styles.emptyPlaceholder} role="img" aria-label="Empty reflection page with decorative tildes">
                 <div>Space for reflection...</div>
                 <div className={styles.tildePattern}>

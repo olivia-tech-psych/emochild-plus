@@ -520,6 +520,37 @@ export function exportJournalToCSV(entries: JournalEntry[]): string {
 }
 
 /**
+ * Get emotions logged on the same day as the given date
+ * Requirements: 1.5
+ */
+export function getSameDayEmotions(emotions: any[], date: Date): any[] {
+  const targetDateString = date.toDateString();
+  
+  return emotions.filter(emotion => {
+    const emotionDate = new Date(emotion.timestamp);
+    return emotionDate.toDateString() === targetDateString;
+  });
+}
+
+/**
+ * Check if two dates are on the same day
+ * Requirements: 1.5
+ */
+export function isSameDay(date1: Date, date2: Date): boolean {
+  return date1.toDateString() === date2.toDateString();
+}
+
+/**
+ * Get emotion details by IDs
+ * Requirements: 1.5
+ */
+export function getEmotionsByIds(emotions: any[], emotionIds: string[]): any[] {
+  return emotionIds
+    .map(id => emotions.find(emotion => emotion.id === id))
+    .filter((emotion): emotion is any => emotion !== undefined);
+}
+
+/**
  * Validate journal entry data
  * Requirements: 1.3
  */
