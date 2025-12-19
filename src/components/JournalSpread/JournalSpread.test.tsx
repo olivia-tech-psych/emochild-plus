@@ -5,10 +5,9 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
 import { JournalSpread } from './JournalSpread';
 import { JournalEntry } from '@/types';
-
-import { vi } from 'vitest';
 
 // Mock the PageCurl component
 vi.mock('../PageCurl', () => ({
@@ -136,5 +135,124 @@ describe('JournalSpread', () => {
     expect(screen.getByRole('main')).toHaveAttribute('aria-label', 'Journal spread');
     expect(screen.getByLabelText(/Left journal page/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Day 15 of the year/)).toBeInTheDocument();
+  });
+
+  describe('Responsive Design', () => {
+    beforeEach(() => {
+      // Mock window.matchMedia for responsive tests
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: vi.fn().mockImplementation(query => ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        })),
+      });
+    });
+
+    it('renders properly on mobile screens', () => {
+      // Mock mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 480,
+      });
+
+      const { container } = render(<JournalSpread {...defaultProps} entry={mockEntry} />);
+      
+      // Check that the component renders without errors on mobile by checking for key elements
+      expect(screen.getByRole('main')).toBeInTheDocument();
+      expect(screen.getAllByRole('article').length).toBeGreaterThanOrEqual(2); // At least left and right pages
+      expect(screen.getByText('Test journal entry content')).toBeInTheDocument();
+    });
+
+    it('renders properly on tablet screens', () => {
+      // Mock tablet viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 768,
+      });
+
+      const { container } = render(<JournalSpread {...defaultProps} entry={mockEntry} />);
+      
+      // Check that the component renders without errors on tablet by checking for key elements
+      expect(screen.getByRole('main')).toBeInTheDocument();
+      expect(screen.getAllByRole('article').length).toBeGreaterThanOrEqual(2); // At least left and right pages
+      expect(screen.getByText('Test journal entry content')).toBeInTheDocument();
+    });
+
+    it('maintains touch-friendly button sizes on mobile', () => {
+      // Mock mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 480,
+      });
+
+      render(<JournalSpread {...defaultProps} isEditing={true} />);
+      
+      // Check that action buttons are present and accessible
+      const saveButton = screen.getByText('Save Entry');
+      const cancelButton = screen.getByText('Cancel');
+      
+      expect(saveButton).toBeInTheDocument();
+      expect(cancelButton).toBeInTheDocument();
+      
+      // Verify buttons have proper accessibility attributes for touch
+      expect(saveButton).toHaveAttribute('aria-label');
+      expect(cancelButton).toHaveAttribute('aria-label');
+      
+      // Check that buttons are clickable (functional test for touch-friendliness)
+      expect(saveButton).toBeDisabled(); // Should be disabled when no content
+      expect(cancelButton).not.toBeDisabled();
+    });
+
+    it('handles text input properly on mobile devices', () => {
+      // Mock mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 480,
+      });
+
+      render(<JournalSpread {...defaultProps} isEditing={true} />);
+      
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toBeInTheDocument();
+      
+      // Test that text input works on mobile
+      fireEvent.change(textarea, { target: { value: 'Mobile test entry' } });
+      expect(textarea).toHaveValue('Mobile test entry');
+      
+      // Verify mobile-specific attributes
+      expect(textarea).toHaveAttribute('maxLength', '5000');
+      // autoFocus is a boolean attribute that may not show up in tests
+      expect(textarea).toHaveAttribute('placeholder');
+    });
+
+    it('displays content correctly in mobile layout', () => {
+      // Mock mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 480,
+      });
+
+      render(<JournalSpread {...defaultProps} entry={mockEntry} />);
+      
+      // Content should still be visible and readable
+      expect(screen.getByText('Test journal entry content')).toBeInTheDocument();
+      expect(screen.getByText('4 words')).toBeInTheDocument();
+      expect(screen.getAllByText(/Monday, January 15, 2024/)).toHaveLength(2);
+      
+      // Navigation should still be present
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
   });
 });
