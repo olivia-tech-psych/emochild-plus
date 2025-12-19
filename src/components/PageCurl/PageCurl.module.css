@@ -1,0 +1,215 @@
+/**
+ * PageCurl Component Styles
+ * CSS animations for realistic page turning effects
+ * Requirements: 1.1, 1.2
+ */
+
+.pageCurlButton {
+  background: var(--color-journal-binding);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 18px;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pageCurlButton:hover:not(:disabled) {
+  background: var(--color-journal-border);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pageCurlButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.pageCurlButton:disabled {
+  background: #E5C2D1;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
+.pageCurlButton:focus-visible {
+  outline: 3px solid #F2C6DE;
+  outline-offset: 2px;
+}
+
+/* Page curl animation effect */
+.pageCurlButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform var(--transition-medium);
+}
+
+.pageCurlButton:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+/* Direction-specific styling */
+.previous {
+  transform: rotate(0deg);
+}
+
+.next {
+  transform: rotate(0deg);
+}
+
+.previous:hover:not(:disabled) {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.next:hover:not(:disabled) {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Curl animation classes */
+.curling {
+  animation: pageCurl var(--animation-duration, 500ms) ease-in-out;
+}
+
+.previous.curling {
+  animation: pageCurlLeft var(--animation-duration, 500ms) ease-in-out;
+}
+
+.next.curling {
+  animation: pageCurlRight var(--animation-duration, 500ms) ease-in-out;
+}
+
+/* Page curl keyframe animations */
+@keyframes pageCurlLeft {
+  0% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(-15deg) translateX(-5px);
+    box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.15) rotate(-10deg) translateX(-3px);
+    box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.3);
+  }
+  75% {
+    transform: scale(1.1) rotate(-5deg) translateX(-1px);
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes pageCurlRight {
+  0% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  25% {
+    transform: scale(1.2) rotate(15deg) translateX(5px);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg) translateX(3px);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg) translateX(1px);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Ripple effect for click feedback */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: rippleEffect 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .pageCurlButton,
+  .pageCurlButton::before {
+    transition: none;
+    animation: none;
+  }
+  
+  .pageCurlButton:hover:not(:disabled),
+  .previous:hover:not(:disabled),
+  .next:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .curling,
+  .previous.curling,
+  .next.curling {
+    animation: none;
+  }
+  
+  .ripple {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pageCurlButton {
+    border: 2px solid currentColor;
+  }
+  
+  .pageCurlButton:focus-visible {
+    outline-width: 4px;
+  }
+}
+
+/* Mobile touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  .pageCurlButton {
+    width: 52px;
+    height: 52px;
+  }
+  
+  .pageCurlButton:hover {
+    transform: none;
+    background: #8B4A6B;
+  }
+  
+  .pageCurlButton:active:not(:disabled) {
+    background: #D4567A;
+    transform: scale(0.95);
+  }
+}

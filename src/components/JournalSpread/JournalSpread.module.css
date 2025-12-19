@@ -1,0 +1,324 @@
+/**
+ * JournalSpread Component Styles
+ * Two-page journal layout with cozy stationery aesthetic
+ * Requirements: 1.1, 1.2
+ */
+
+.journalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: var(--spacing-lg);
+  perspective: 1000px;
+}
+
+.journalSpread {
+  display: flex;
+  gap: 2px;
+  background: var(--color-journal-binding); /* Darker pink for binding */
+  padding: 8px 4px;
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+}
+
+/* Central binding shadow */
+.journalSpread::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.2)
+  );
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.journalPage {
+  flex: 1;
+  background: var(--color-journal-page); /* Light pink pages */
+  border: 3px solid var(--color-journal-border); /* Dark pink borders */
+  border-radius: 8px;
+  padding: var(--spacing-lg);
+  min-height: 500px;
+  position: relative;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: transform var(--transition-medium);
+}
+
+.journalPage:hover {
+  transform: translateY(-2px);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-journal-border);
+}
+
+.pageDate {
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-journal-binding);
+  margin: 0;
+}
+
+.dayOfYear {
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  font-size: 14px;
+  color: var(--color-journal-placeholder);
+  font-weight: 400;
+}
+
+.pageContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+}
+
+.contentArea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-journal-text);
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  transition: background-color var(--transition-fast);
+}
+
+.contentArea:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.contentArea::placeholder {
+  color: var(--color-journal-placeholder);
+  font-style: italic;
+}
+
+.emptyPlaceholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-journal-placeholder);
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  font-size: 24px;
+  font-style: italic;
+  text-align: center;
+  gap: var(--spacing-sm);
+}
+
+.tildePattern {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0.4;
+  margin: var(--spacing-md) 0;
+}
+
+.tilde {
+  font-size: 20px;
+  color: var(--color-journal-border);
+}
+
+.pageActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid #E5C2D1;
+}
+
+.actionButton {
+  background: var(--color-journal-border);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.actionButton:hover:not(:disabled) {
+  background: var(--color-journal-placeholder);
+  transform: translateY(-1px);
+}
+
+.actionButton:disabled {
+  background: #E5C2D1;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--color-journal-binding);
+  border: 2px solid var(--color-journal-border);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: var(--color-journal-border);
+  color: white;
+}
+
+.navigationControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-lg);
+  padding: 0 var(--spacing-md);
+}
+
+.navButton {
+  background: var(--color-journal-binding);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navButton:hover:not(:disabled) {
+  background: var(--color-journal-border);
+  transform: scale(1.1);
+}
+
+.navButton:disabled {
+  background: #E5C2D1;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pageIndicator {
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  color: var(--color-journal-binding);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .journalContainer {
+    padding: var(--spacing-md);
+    min-height: 60vh;
+  }
+  
+  .journalSpread {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-width: none;
+  }
+  
+  .journalPage {
+    min-height: 300px;
+  }
+  
+  .pageDate {
+    font-size: 16px;
+  }
+  
+  .contentArea {
+    font-size: 15px;
+  }
+  
+  .emptyPlaceholder {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .journalContainer {
+    padding: var(--spacing-sm);
+  }
+  
+  .journalPage {
+    padding: var(--spacing-md);
+    min-height: 250px;
+  }
+  
+  .pageDate {
+    font-size: 15px;
+  }
+  
+  .contentArea {
+    font-size: 14px;
+  }
+  
+  .emptyPlaceholder {
+    font-size: 18px;
+  }
+  
+  .actionButton {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 13px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .journalPage,
+  .actionButton,
+  .navButton,
+  .contentArea {
+    transition: none;
+  }
+  
+  .journalPage:hover,
+  .actionButton:hover,
+  .navButton:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .journalPage {
+    border-width: 4px;
+  }
+  
+  .pageHeader {
+    border-bottom-width: 3px;
+  }
+  
+  .actionButton {
+    border: 2px solid currentColor;
+  }
+}

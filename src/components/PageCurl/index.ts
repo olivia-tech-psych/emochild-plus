@@ -1,0 +1,1 @@
+export { PageCurl } from './PageCurl';

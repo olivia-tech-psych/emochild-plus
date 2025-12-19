@@ -124,6 +124,7 @@
 }
 
 .landingLink,
+.journalLink,
 .settingsLink {
   color: var(--color-text-secondary);
   text-decoration: none;
@@ -134,12 +135,23 @@
 
 .landingLink:hover,
 .landingLink:focus,
+.journalLink:hover,
+.journalLink:focus,
 .settingsLink:hover,
 .settingsLink:focus {
   color: var(--color-mint);
   outline: 2px solid var(--color-mint);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+.journalLink {
+  color: var(--color-journal-border);
+}
+
+.journalLink:hover,
+.journalLink:focus {
+  color: var(--color-journal-binding);
 }
 
 /* Responsive adjustments */

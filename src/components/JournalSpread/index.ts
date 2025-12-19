@@ -1,0 +1,1 @@
+export { JournalSpread } from './JournalSpread';

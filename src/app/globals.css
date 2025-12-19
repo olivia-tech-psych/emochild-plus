@@ -52,6 +52,13 @@
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
+  
+  /* Journal-specific colors */
+  --color-journal-border: #D4567A;
+  --color-journal-page: #F8E8ED;
+  --color-journal-binding: #8B4A6B;
+  --color-journal-text: #5A3A4A;
+  --color-journal-placeholder: #B8677A;
 }
 
 * {

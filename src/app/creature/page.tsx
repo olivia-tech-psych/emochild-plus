@@ -187,6 +187,9 @@ export default function CreaturePage() {
           <Link href="/" className={styles.landingLink}>
             ← Home
           </Link>
+          <Link href="/journal" className={styles.journalLink}>
+            📖 Journal
+          </Link>
           <Link href="/settings" className={styles.settingsLink}>
             ⚙️ Settings
           </Link>

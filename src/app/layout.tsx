@@ -2,6 +2,16 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { EmotionProvider } from '@/context/EmotionContext'
 
+// Import handwriting font for journal components
+import { Kalam } from 'next/font/google'
+
+const kalam = Kalam({
+  subsets: ['latin'],
+  weight: ['300', '400', '700'],
+  display: 'swap',
+  variable: '--font-kalam'
+})
+
 export const metadata: Metadata = {
   title: 'EmoChild',
   description: 'Your emotional wellness companion',
@@ -21,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={kalam.variable}>
         <EmotionProvider>
           {children}
         </EmotionProvider>
