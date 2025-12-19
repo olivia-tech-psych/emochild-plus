@@ -4,7 +4,7 @@
  * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { JournalEntry, JournalPage } from '@/types';
 import { PageCurl } from '../PageCurl';
 import styles from './JournalSpread.module.css';
@@ -60,6 +60,11 @@ export function JournalSpread({
   onToggleEmotion
 }: JournalSpreadProps) {
   const [editContent, setEditContent] = useState(entry?.content || '');
+  
+  // Calculate word count for current edit content
+  const currentWordCount = editContent.trim() 
+    ? editContent.trim().split(/\s+/).filter(word => word.length > 0).length 
+    : 0;
 
   // Calculate day of year (1-365)
   const dayOfYear = Math.floor((currentDate.getTime() - new Date(currentDate.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
@@ -74,19 +79,40 @@ export function JournalSpread({
     });
   };
 
-  // Handle save action
+  // Handle save action with validation
   const handleSave = useCallback(() => {
-    if (editContent.trim()) {
-      onSave(editContent.trim(), linkedEmotions);
-      setEditContent('');
+    const trimmedContent = editContent.trim();
+    
+    // Validate entry content
+    if (!trimmedContent) {
+      return; // Don't save empty entries
     }
+    
+    // Additional validation: minimum word count (optional)
+    if (trimmedContent.split(/\s+/).filter(word => word.length > 0).length < 1) {
+      return; // Ensure at least one meaningful word
+    }
+    
+    onSave(trimmedContent, linkedEmotions);
+    setEditContent('');
   }, [editContent, linkedEmotions, onSave]);
 
-  // Handle cancel action
+  // Handle cancel action with confirmation for unsaved changes
   const handleCancel = useCallback(() => {
+    const hasUnsavedChanges = editContent.trim() !== (entry?.content || '').trim();
+    
+    if (hasUnsavedChanges && editContent.trim()) {
+      const confirmCancel = window.confirm(
+        'You have unsaved changes. Are you sure you want to cancel?'
+      );
+      if (!confirmCancel) {
+        return;
+      }
+    }
+    
     setEditContent(entry?.content || '');
     onCancel();
-  }, [entry?.content, onCancel]);
+  }, [editContent, entry?.content, onCancel]);
 
   // Generate tilde pattern for empty pages
   const generateTildePattern = () => {
@@ -102,6 +128,30 @@ export function JournalSpread({
   
   // Check if current date is in the future
   const isFuture = currentDate > new Date();
+
+  // Handle keyboard shortcuts when editing
+  useEffect(() => {
+    if (!isEditing) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Save with Ctrl+S (or Cmd+S on Mac)
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        if (editContent.trim() && currentWordCount > 0) {
+          handleSave();
+        }
+      }
+      
+      // Cancel with Escape
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        handleCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isEditing, editContent, currentWordCount, handleSave, handleCancel]);
 
   return (
     <div className={styles.journalContainer}>
@@ -123,7 +173,10 @@ export function JournalSpread({
                 onChange={(e) => setEditContent(e.target.value)}
                 placeholder="What's on your heart today? Let your thoughts flow..."
                 aria-label="Journal entry content"
+                aria-describedby="word-count-display"
                 autoFocus
+                maxLength={5000} // Reasonable limit for journal entries
+                rows={12} // Minimum rows for better UX
               />
             ) : entry?.content ? (
               <div 
@@ -145,23 +198,47 @@ export function JournalSpread({
           </div>
 
           {isEditing && (
-            <div className={styles.pageActions}>
-              <button 
-                className={`${styles.actionButton} ${styles.secondaryButton}`}
-                onClick={handleCancel}
-                aria-label="Cancel editing"
+            <>
+              <div 
+                id="word-count-display"
+                className={styles.wordCountDisplay} 
+                role="status" 
+                aria-live="polite"
               >
-                Cancel
-              </button>
-              <button 
-                className={styles.actionButton}
-                onClick={handleSave}
-                disabled={!editContent.trim()}
-                aria-label="Save journal entry"
-              >
-                Save Entry
-              </button>
-            </div>
+                <span className={styles.wordCount}>
+                  {currentWordCount} word{currentWordCount !== 1 ? 's' : ''}
+                </span>
+                {currentWordCount === 0 && (
+                  <span className={styles.validationHint}>
+                    Start writing to save your entry
+                  </span>
+                )}
+                {editContent.length > 4500 && (
+                  <span className={styles.validationHint}>
+                    {5000 - editContent.length} characters remaining
+                  </span>
+                )}
+              </div>
+              <div className={styles.pageActions}>
+                <button 
+                  className={`${styles.actionButton} ${styles.secondaryButton}`}
+                  onClick={handleCancel}
+                  aria-label="Cancel editing (Esc)"
+                  title="Cancel editing (Esc)"
+                >
+                  Cancel
+                </button>
+                <button 
+                  className={styles.actionButton}
+                  onClick={handleSave}
+                  disabled={!editContent.trim() || currentWordCount === 0}
+                  aria-label={`Save journal entry (${currentWordCount} words) - Ctrl+S`}
+                  title={`Save journal entry (${currentWordCount} words) - Ctrl+S`}
+                >
+                  Save Entry
+                </button>
+              </div>
+            </>
           )}
         </div>
 

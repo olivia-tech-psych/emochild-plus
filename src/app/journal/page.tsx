@@ -21,16 +21,24 @@ export default function JournalPage() {
     entry.date.toDateString() === currentDate.toDateString()
   );
 
-  // Handle saving an entry
+  // Handle saving an entry with validation
   const handleSave = (content: string, linkedEmotions: string[] = []) => {
+    // Validate content
+    if (!content.trim()) {
+      console.warn('Cannot save empty journal entry');
+      return;
+    }
+
+    const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+    
     const newEntry: JournalEntry = {
-      id: Date.now().toString(),
-      content,
+      id: currentEntry?.id || Date.now().toString(),
+      content: content.trim(),
       date: new Date(currentDate),
-      createdAt: new Date(),
+      createdAt: currentEntry?.createdAt || new Date(),
       updatedAt: new Date(),
       linkedEmotions,
-      wordCount: content.split(/\s+/).filter(word => word.length > 0).length,
+      wordCount,
       tags: [],
       dayOfYear: Math.floor((currentDate.getTime() - new Date(currentDate.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
     };
@@ -39,7 +47,7 @@ export default function JournalPage() {
       // Update existing entry
       setEntries(prev => prev.map(entry => 
         entry.id === currentEntry.id 
-          ? { ...newEntry, id: currentEntry.id, createdAt: currentEntry.createdAt }
+          ? newEntry
           : entry
       ));
     } else {

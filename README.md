@@ -4,6 +4,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 
 ## Current Features Implemented
 
+### Core V2 Features
 - **Type System**: Complete TypeScript type definitions including EmotionLog, CreatureState, AppState, CreatureCustomization, PastelColor, and QuickEmotion types
 - **Storage Service**: localStorage-based persistence layer with error handling for logs, creature state, safety scores, customization settings, and micro-sentence index
 - **Creature State Logic**: Calculation utilities for brightness/size changes based on expressed/suppressed emotions
@@ -22,8 +23,19 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **MicroSentence Component**: Displays encouraging validation messages when emotions are expressed, with fade-in/out animation, auto-dismiss after 2 seconds, manual dismissal option, and soft pastel glow effect for emotional support
 - **LogHistory Component**: Displays emotion logs in reverse chronological order with human-readable timestamps, visual indicators for expressed/suppressed actions, empty state handling, scrollable list, text color rendering from saved logs, delete functionality with confirmation dialog, edit functionality for log text, CSV export feature with UTF-8 BOM for proper emoji encoding, and pastel dividers between entries
 - **Navigation Component**: Provides navigation links between main and history pages with smooth transitions using Next.js Link component, styled with pastel colors and focus indicators
+
+### New V3 Features
+- **Extended Type System**: Added JournalEntry, JournalPage, PromptTrack, Prompt, EmotionalPattern, ChartData, TimeRange, and AnalyticsPreferences types for advanced features
+- **JournalSpread Component**: Two-page journal interface with cozy stationery aesthetic, dark pink borders, handwriting-style font (Kalam), tilde placeholders for empty content, date headers with day-of-year display, real-time word count calculation and display, and responsive design
+- **PageCurl Component**: Animated navigation buttons for journal pages with realistic curl effects, ripple feedback, direction-specific animations, accessibility support, and reduced motion compatibility
+- **Journal Utilities**: Comprehensive date calculations with leap year support, word count calculation, journal entry creation/updating, date range filtering, and CSV export functionality
+- **Storage Service V3**: Extended storage layer supporting journal entries, prompt tracks, prompts, and analytics preferences with backward compatibility to V2 data
+- **Migration Service**: Automatic data migration from V2 to V3 format with error handling, data validation, and seamless upgrade path for existing users
+- **Analytics Utilities**: Local emotional pattern analysis including expression ratios, common emotions, streaks, trends, and chart data generation with complete privacy (no external requests)
+- **Prompt System Utilities**: Daily prompt unlocking logic, Inner Child and Inner Teenager prompt tracks (365 prompts each), completion tracking, and category-based organization
+- **Journal Page Navigation**: Advanced page navigation system with chronological ordering, leap year support, future date restrictions, and comprehensive navigation state management
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
-- **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library
+- **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library for all V2 and V3 components
 
 ## File Structure Overview
 
@@ -31,74 +43,67 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 emochild/
 ├── src/
 │   ├── app/
-│   │   ├── globals.css         # Theme variables and global styles
-│   │   ├── layout.tsx          # Root layout
-│   │   └── page.tsx            # Main page (placeholder)
+│   │   ├── globals.css              # Theme variables and global styles
+│   │   ├── layout.tsx               # Root layout
+│   │   ├── page.tsx                 # Landing page
+│   │   ├── creature/page.tsx        # Main creature screen
+│   │   ├── history/page.tsx         # Emotion log history
+│   │   ├── journal/page.tsx         # Journal interface (V3)
+│   │   ├── settings/page.tsx        # Settings page (V3)
+│   │   └── setup/page.tsx           # Creature setup flow
 │   ├── components/
-│   │   ├── ActionButtons/      # Express/Suppress action buttons
-│   │   │   ├── ActionButtons.tsx
-│   │   │   ├── ActionButtons.module.css
+│   │   ├── ActionButtons/           # Express/Suppress action buttons
+│   │   ├── ColorPicker/             # Reusable color selector component
+│   │   ├── Creature/                # Animated creature component
+│   │   ├── EmotionInput/            # Emotion log input component
+│   │   ├── ErrorToast/              # Error notification component
+│   │   ├── JournalSpread/           # Two-page journal interface (V3)
+│   │   │   ├── JournalSpread.tsx
+│   │   │   ├── JournalSpread.test.tsx
+│   │   │   ├── JournalSpread.module.css
 │   │   │   └── index.ts
-│   │   ├── ColorPicker/        # Reusable color selector component
-│   │   │   ├── ColorPicker.tsx
-│   │   │   ├── ColorPicker.test.tsx
-│   │   │   ├── ColorPicker.module.css
+│   │   ├── LandingHero/             # Landing page hero section
+│   │   ├── LogHistory/              # Emotion log history display
+│   │   ├── MicroSentence/           # Validation message display
+│   │   ├── Navigation/              # Navigation between pages
+│   │   ├── PageCurl/                # Animated journal page navigation (V3)
+│   │   │   ├── PageCurl.tsx
+│   │   │   ├── PageCurl.test.tsx
+│   │   │   ├── PageCurl.module.css
 │   │   │   └── index.ts
-│   │   ├── LandingHero/        # Landing page hero section
-│   │   │   ├── LandingHero.tsx
-│   │   │   ├── LandingHero.module.css
-│   │   │   └── index.ts
-│   │   ├── SetupForm/          # Creature customization form
-│   │   │   ├── SetupForm.tsx
-│   │   │   ├── SetupForm.module.css
-│   │   │   └── index.ts
-│   │   ├── Creature/           # Animated creature component
-│   │   │   ├── Creature.tsx
-│   │   │   ├── Creature.test.tsx
-│   │   │   ├── Creature.module.css
-│   │   │   └── index.ts
-│   │   ├── EmotionInput/       # Emotion log input component
-│   │   │   ├── EmotionInput.tsx
-│   │   │   ├── EmotionInput.test.tsx
-│   │   │   ├── EmotionInput.module.css
-│   │   │   └── index.ts
-│   │   ├── LogHistory/         # Emotion log history display
-│   │   │   ├── LogHistory.tsx
-│   │   │   ├── LogHistory.test.tsx
-│   │   │   ├── LogHistory.module.css
-│   │   │   └── index.ts
-│   │   ├── MicroSentence/      # Validation message display
-│   │   │   ├── MicroSentence.tsx
-│   │   │   ├── MicroSentence.module.css
-│   │   │   └── index.ts
-│   │   ├── Navigation/         # Navigation between pages
-│   │   │   ├── Navigation.tsx
-│   │   │   ├── Navigation.module.css
-│   │   │   └── index.ts
-│   │   ├── QuickEmotions/      # Quick emotion buttons for faster logging
-│   │   │   ├── QuickEmotions.tsx
-│   │   │   ├── QuickEmotions.module.css
-│   │   │   └── index.ts
-│   │   └── SafetyBar/          # Inner safety score progress bar
-│   │       ├── SafetyBar.tsx
-│   │       ├── SafetyBar.module.css
-│   │       └── index.ts
+│   │   ├── QuickEmotions/           # Quick emotion buttons for faster logging
+│   │   ├── SafetyBar/               # Inner safety score progress bar
+│   │   └── SetupForm/               # Creature customization form
 │   ├── context/
-│   │   ├── EmotionContext.tsx       # Global state management
-│   │   └── EmotionContext.test.tsx
+│   │   ├── EmotionContext.tsx                    # Global state management
+│   │   ├── EmotionContext.test.tsx
+│   │   └── EmotionContext.settingsPersistence.test.tsx
 │   ├── services/
-│   │   ├── storageService.ts        # localStorage abstraction
-│   │   └── storageService.test.ts
+│   │   ├── storageService.ts                     # V2 localStorage abstraction
+│   │   ├── storageService.test.ts
+│   │   ├── storageServiceV3.ts                   # V3 extended storage (NEW)
+│   │   ├── storageServiceV3.test.ts
+│   │   ├── migrationService.ts                   # V2 to V3 data migration (NEW)
+│   │   ├── migrationService.test.ts
+│   │   ├── journalIntegration.test.ts
+│   │   ├── settingsPersistence.test.ts
+│   │   └── textColorPreference.test.ts
 │   ├── types/
-│   │   └── index.ts                 # TypeScript type definitions
+│   │   └── index.ts                              # Extended TypeScript type definitions
 │   └── utils/
-│       ├── colorMapping.ts          # Color hex/glow mappings and transformations
+│       ├── colorMapping.ts                       # Color hex/glow mappings and transformations
 │       ├── colorMapping.test.ts
-│       ├── creatureState.ts         # Creature state calculations
+│       ├── creatureState.ts                      # Creature state calculations
 │       ├── creatureState.test.ts
-│       ├── microSentences.ts        # Micro-sentence cycling logic
+│       ├── microSentences.ts                     # Micro-sentence cycling logic
 │       ├── microSentences.test.ts
-│       └── contrast.test.ts         # Accessibility tests
+│       ├── journalUtils.ts                       # Journal operations and navigation (NEW)
+│       ├── journalUtils.test.ts
+│       ├── journalNavigation.test.ts
+│       ├── analyticsUtils.ts                     # Local emotional pattern analysis (NEW)
+│       ├── promptUtils.ts                        # Prompt system utilities (NEW)
+│       ├── accessibility.test.tsx
+│       └── contrast.test.ts                      # Accessibility tests
 ├── vitest.config.ts
 ├── vitest.setup.ts
 └── package.json
@@ -118,11 +123,17 @@ This project is being developed using **Kiro Specs**, a structured approach to b
 - **Design Document** (`.kiro/specs/emochild-v2/design.md`): Adds 20 new correctness properties for enhanced features
 - **Tasks Document** (`.kiro/specs/emochild-v2/tasks.md`): Breaks v2 implementation into 26 incremental tasks
 
+**Version 3 (emochild-v3):**
+- **Requirements Document** (`.kiro/specs/emochild-v3/requirements.md`): Introduces journal system, prompt tracks, and analytics features
+- **Design Document** (`.kiro/specs/emochild-v3/design.md`): Comprehensive architecture for journal interface, prompt system, and local analytics
+- **Tasks Document** (`.kiro/specs/emochild-v3/tasks.md`): Detailed implementation roadmap for V3 features
+
 The spec-driven approach ensures:
 - Clear requirements traceability
 - Property-based testing aligned with design properties
 - Incremental development with checkpoints
 - Comprehensive test coverage from the start
+- Seamless migration between versions
 
 ## Technology Stack
 
@@ -421,3 +432,28 @@ npm run test:watch
 - Text color is preserved during editing for visual consistency
 - Edit feature maintains character limit validation and updates localStorage immediately
 - Enhanced user control over emotion log history with both export and edit capabilities
+
+### [2025-12-19 14:30] Version 3 Foundation - Journal System and Advanced Features
+- **Extended Type System**: Added comprehensive V3 types including JournalEntry, JournalPage, PromptTrack, Prompt, EmotionalPattern, ChartData, TimeRange, and AnalyticsPreferences for advanced functionality
+- **JournalSpread Component**: Implemented two-page journal interface with cozy stationery aesthetic, dark pink borders (#D4567A), light pink pages (#F8E8ED), handwriting-style Kalam font, tilde placeholders for empty content, and responsive design
+- **PageCurl Component**: Created animated navigation buttons with realistic page curl effects, ripple feedback on click, direction-specific animations, accessibility support, and reduced motion compatibility
+- **Storage Service V3**: Extended storage layer supporting journal entries, prompt tracks, prompts, and analytics preferences while maintaining full backward compatibility with V2 data
+- **Migration Service**: Implemented automatic data migration from V2 to V3 format with comprehensive error handling, data validation, and seamless upgrade path for existing users
+- **Journal Utilities**: Built comprehensive date calculation system with leap year support, word count calculation, journal entry CRUD operations, date range filtering, CSV export functionality, and advanced page navigation
+- **Analytics Utilities**: Developed local emotional pattern analysis including expression ratios, common emotions tracking, streak calculations, trend analysis, and chart data generation with complete privacy (no external requests)
+- **Prompt System Utilities**: Created daily prompt unlocking logic, Inner Child and Inner Teenager prompt tracks (365 prompts each), completion tracking, category-based organization, and progress statistics
+- **Journal Page Navigation**: Advanced chronological page navigation system with leap year support, future date restrictions, entry linking, and comprehensive navigation state management
+- **Demo Journal Page**: Functional journal interface at `/journal` route showcasing the complete journal system with editing, navigation, and entry management
+- **Comprehensive Testing**: Added extensive test coverage for all V3 components, utilities, and services using Vitest and React Testing Library
+- **Accessibility Implementation**: Enhanced accessibility features across all V3 components with proper ARIA labels, keyboard navigation, and screen reader support
+- Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 3.1, 3.2, 3.3, 3.4, 3.5, 4.1, 4.2, 4.3, 4.5, 5.1, 5.2, 5.3, 5.4
+
+### [2025-12-19 16:00] JournalSpread Real-Time Word Count Enhancement
+- Enhanced JournalSpread component with real-time word count calculation and display during editing
+- Added currentWordCount state that dynamically calculates words as user types in the journal textarea
+- Integrated word count display in the journal interface showing "X word(s)" with proper pluralization
+- Enhanced save button validation to require at least one word before enabling save functionality
+- Added word count information to save button ARIA label and title for better accessibility
+- Improved keyboard shortcut (Ctrl+S) validation to check both content and word count before saving
+- Added validation hint "Start writing to save your entry" when word count is zero
+- Provides immediate feedback to users about their writing progress and entry completeness
