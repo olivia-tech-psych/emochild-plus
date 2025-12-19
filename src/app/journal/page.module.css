@@ -32,6 +32,12 @@
   display: flex;
   gap: var(--spacing-md);
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.exportButton {
+  font-size: 13px;
+  padding: 8px 12px;
 }
 
 .editButton,

@@ -1,0 +1,222 @@
+/**
+ * ExportButton Component Styles
+ * Styling for CSV export functionality
+ * Requirements: 2.1, 2.2, 2.3
+ */
+
+.exportContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+  align-items: flex-start;
+}
+
+.exportButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  padding: var(--spacing-sm, 12px) var(--spacing-md, 16px);
+  background: var(--color-journal-binding, #D4567A);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md, 8px);
+  font-family: var(--font-primary, system-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Touch-friendly minimum */
+  position: relative;
+  overflow: hidden;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: var(--color-journal-binding-hover, #B8456A);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(212, 86, 122, 0.3);
+}
+
+.exportButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(212, 86, 122, 0.3);
+}
+
+.exportButton:disabled {
+  background: var(--color-disabled, #ccc);
+  color: var(--color-disabled-text, #666);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.exportButton:focus-visible {
+  outline: 2px solid var(--color-focus, #4A90E2);
+  outline-offset: 2px;
+}
+
+.exportIcon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.loadingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.exportSummary {
+  font-size: 12px;
+  color: var(--color-text-secondary, #666);
+  font-family: var(--font-primary, system-ui, sans-serif);
+  margin-top: 2px;
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 8px);
+  padding: var(--spacing-sm, 12px);
+  background: var(--color-error-bg, #FEF2F2);
+  color: var(--color-error-text, #DC2626);
+  border: 1px solid var(--color-error-border, #FECACA);
+  border-radius: var(--border-radius-md, 8px);
+  font-size: 14px;
+  font-family: var(--font-primary, system-ui, sans-serif);
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.errorIcon {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.dismissError {
+  background: none;
+  border: none;
+  color: var(--color-error-text, #DC2626);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.dismissError:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.dismissError:focus-visible {
+  outline: 2px solid var(--color-focus, #4A90E2);
+  outline-offset: 1px;
+}
+
+/* Simplified export button */
+.exportButtonSimple {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-sm, 12px) var(--spacing-md, 16px);
+  background: var(--color-journal-binding, #D4567A);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md, 8px);
+  font-family: var(--font-primary, system-ui, sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Touch-friendly minimum */
+}
+
+.exportButtonSimple:hover:not(:disabled) {
+  background: var(--color-journal-binding-hover, #B8456A);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(212, 86, 122, 0.3);
+}
+
+.exportButtonSimple:disabled {
+  background: var(--color-disabled, #ccc);
+  color: var(--color-disabled-text, #666);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.exportButtonSimple:focus-visible {
+  outline: 2px solid var(--color-focus, #4A90E2);
+  outline-offset: 2px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .exportButton,
+  .exportButtonSimple {
+    padding: var(--spacing-sm, 12px);
+    font-size: 14px;
+    min-height: 48px; /* Larger touch target on mobile */
+  }
+  
+  .exportContainer {
+    width: 100%;
+  }
+  
+  .exportButton,
+  .exportButtonSimple {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .errorMessage {
+    max-width: 100%;
+    font-size: 13px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .exportButton,
+  .exportButtonSimple {
+    border: 2px solid currentColor;
+  }
+  
+  .errorMessage {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .exportButton,
+  .exportButtonSimple {
+    transition: none;
+  }
+  
+  .exportButton:hover:not(:disabled),
+  .exportButtonSimple:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .loadingSpinner {
+    animation: none;
+    border: 2px solid white;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+  }
+}

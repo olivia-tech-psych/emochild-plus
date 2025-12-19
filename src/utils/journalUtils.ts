@@ -489,8 +489,9 @@ export class JournalPageNavigator {
 }
 
 /**
- * Export journal entries to CSV format
+ * Export journal entries to CSV format (legacy function - use exportService instead)
  * Requirements: 2.1, 2.2
+ * @deprecated Use exportService.getJournalCSVContent() instead
  */
 export function exportJournalToCSV(entries: JournalEntry[]): string {
   if (entries.length === 0) {

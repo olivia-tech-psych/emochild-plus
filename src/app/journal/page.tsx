@@ -8,6 +8,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { JournalSpread } from '@/components/JournalSpread';
+import { ExportButton } from '@/components/ExportButton';
 import { JournalEntry } from '@/types';
 import { useEmotion } from '@/context/EmotionContext';
 import styles from './page.module.css';
@@ -119,6 +120,17 @@ export default function JournalPage() {
           >
             Today
           </button>
+          <ExportButton
+            entries={entries}
+            allEmotions={allEmotions}
+            onExportSuccess={(filename) => {
+              console.log(`Journal exported successfully: ${filename}`);
+            }}
+            onExportError={(error) => {
+              console.error('Export failed:', error);
+            }}
+            className={styles.exportButton}
+          />
         </div>
       </header>
 
