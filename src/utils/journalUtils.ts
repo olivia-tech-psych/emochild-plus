@@ -7,7 +7,7 @@
 import { JournalEntry, JournalPage } from '@/types';
 
 /**
- * Calculate day of year (1-365) from a date
+ * Calculate day of year (1-365/366) from a date with leap year support
  * Requirements: 1.4
  */
 export function getDayOfYear(date: Date): number {
@@ -18,11 +18,34 @@ export function getDayOfYear(date: Date): number {
 }
 
 /**
- * Get date from day of year
+ * Check if a year is a leap year
+ * Requirements: 1.4
+ */
+export function isLeapYear(year: number): boolean {
+  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+}
+
+/**
+ * Get the total number of days in a year (365 or 366 for leap years)
+ * Requirements: 1.4
+ */
+export function getDaysInYear(year: number): number {
+  return isLeapYear(year) ? 366 : 365;
+}
+
+/**
+ * Get date from day of year with leap year support
  * Requirements: 1.4
  */
 export function getDateFromDayOfYear(dayOfYear: number, year?: number): Date {
   const currentYear = year || new Date().getFullYear();
+  const maxDays = getDaysInYear(currentYear);
+  
+  // Validate day of year is within valid range
+  if (dayOfYear < 1 || dayOfYear > maxDays) {
+    throw new Error(`Day of year must be between 1 and ${maxDays} for year ${currentYear}`);
+  }
+  
   const date = new Date(currentYear, 0, dayOfYear);
   return date;
 }
@@ -180,12 +203,13 @@ export function sortEntriesByDate(entries: JournalEntry[], ascending = false): J
 }
 
 /**
- * Get navigation info for journal pages
+ * Get navigation info for journal pages with leap year support
  * Requirements: 1.4
  */
 export function getJournalNavigation(currentDate: Date, entries: JournalEntry[]) {
   const currentYear = currentDate.getFullYear();
   const currentDayOfYear = getDayOfYear(currentDate);
+  const totalDaysInYear = getDaysInYear(currentYear);
   
   // Calculate previous and next dates
   const previousDate = new Date(currentDate);
@@ -194,9 +218,9 @@ export function getJournalNavigation(currentDate: Date, entries: JournalEntry[])
   const nextDate = new Date(currentDate);
   nextDate.setDate(nextDate.getDate() + 1);
   
-  // Check if we can navigate
+  // Check if we can navigate (stay within the same year)
   const canTurnPrevious = getDayOfYear(previousDate) >= 1 && previousDate.getFullYear() === currentYear;
-  const canTurnNext = getDayOfYear(nextDate) <= 365 && nextDate.getFullYear() === currentYear && !isFuture(nextDate);
+  const canTurnNext = getDayOfYear(nextDate) <= totalDaysInYear && nextDate.getFullYear() === currentYear && !isFuture(nextDate);
   
   // Find entries for adjacent dates
   const previousEntry = canTurnPrevious ? findEntryForDate(entries, previousDate) : undefined;
@@ -211,8 +235,257 @@ export function getJournalNavigation(currentDate: Date, entries: JournalEntry[])
     previousEntry,
     nextEntry,
     currentDayOfYear,
-    totalDaysInYear: 365
+    totalDaysInYear
   };
+}
+
+/**
+ * Journal page navigation system
+ * Handles date-based page calculation and chronological ordering
+ * Requirements: 1.4
+ */
+export class JournalPageNavigator {
+  private currentYear: number;
+  private entries: JournalEntry[];
+  
+  constructor(entries: JournalEntry[] = [], year?: number) {
+    this.entries = entries;
+    this.currentYear = year || new Date().getFullYear();
+  }
+  
+  /**
+   * Get the current year being navigated
+   */
+  getCurrentYear(): number {
+    return this.currentYear;
+  }
+  
+  /**
+   * Set the year for navigation
+   */
+  setYear(year: number): void {
+    this.currentYear = year;
+  }
+  
+  /**
+   * Update the entries collection
+   */
+  updateEntries(entries: JournalEntry[]): void {
+    this.entries = entries;
+  }
+  
+  /**
+   * Get total number of pages (days) in the current year
+   */
+  getTotalPages(): number {
+    return getDaysInYear(this.currentYear);
+  }
+  
+  /**
+   * Get page number (day of year) for a given date
+   */
+  getPageNumber(date: Date): number {
+    if (date.getFullYear() !== this.currentYear) {
+      throw new Error(`Date must be in the current navigation year (${this.currentYear})`);
+    }
+    return getDayOfYear(date);
+  }
+  
+  /**
+   * Get date for a given page number (day of year)
+   */
+  getDateForPage(pageNumber: number): Date {
+    return getDateFromDayOfYear(pageNumber, this.currentYear);
+  }
+  
+  /**
+   * Navigate to the next page (chronologically)
+   */
+  getNextPage(currentDate: Date): Date | null {
+    const currentPageNumber = this.getPageNumber(currentDate);
+    const totalPages = this.getTotalPages();
+    
+    if (currentPageNumber >= totalPages) {
+      return null; // Already at the last page
+    }
+    
+    const nextDate = this.getDateForPage(currentPageNumber + 1);
+    
+    // Don't allow navigation to future dates
+    if (isFuture(nextDate)) {
+      return null;
+    }
+    
+    return nextDate;
+  }
+  
+  /**
+   * Navigate to the previous page (chronologically)
+   */
+  getPreviousPage(currentDate: Date): Date | null {
+    const currentPageNumber = this.getPageNumber(currentDate);
+    
+    if (currentPageNumber <= 1) {
+      return null; // Already at the first page
+    }
+    
+    return this.getDateForPage(currentPageNumber - 1);
+  }
+  
+  /**
+   * Jump to a specific page by date
+   */
+  jumpToDate(targetDate: Date): Date | null {
+    if (targetDate.getFullYear() !== this.currentYear) {
+      return null; // Date not in current year
+    }
+    
+    if (isFuture(targetDate)) {
+      return null; // Don't allow navigation to future dates
+    }
+    
+    return targetDate;
+  }
+  
+  /**
+   * Jump to today's page
+   */
+  jumpToToday(): Date {
+    const today = new Date();
+    
+    // If today is not in the current navigation year, set year to current year
+    if (today.getFullYear() !== this.currentYear) {
+      this.setYear(today.getFullYear());
+    }
+    
+    return today;
+  }
+  
+  /**
+   * Get the first page of the year (January 1st)
+   */
+  getFirstPage(): Date {
+    return this.getDateForPage(1);
+  }
+  
+  /**
+   * Get the last accessible page (either December 31st or today, whichever is earlier)
+   */
+  getLastAccessiblePage(): Date {
+    const today = new Date();
+    const lastDayOfYear = this.getDateForPage(this.getTotalPages());
+    
+    // If we're in the current year, the last accessible page is today or the last day of year
+    if (this.currentYear === today.getFullYear()) {
+      return today.getTime() < lastDayOfYear.getTime() ? today : lastDayOfYear;
+    }
+    
+    // If we're in a past year, all pages are accessible
+    if (this.currentYear < today.getFullYear()) {
+      return lastDayOfYear;
+    }
+    
+    // If we're in a future year, no pages are accessible
+    return this.getFirstPage();
+  }
+  
+  /**
+   * Check if a page has an entry
+   */
+  hasEntryForPage(date: Date): boolean {
+    return !!findEntryForDate(this.entries, date);
+  }
+  
+  /**
+   * Get entry for a specific page
+   */
+  getEntryForPage(date: Date): JournalEntry | undefined {
+    return findEntryForDate(this.entries, date);
+  }
+  
+  /**
+   * Get all pages with entries in chronological order
+   */
+  getPagesWithEntries(): Date[] {
+    const currentYearEntries = this.entries.filter(entry => 
+      entry.date.getFullYear() === this.currentYear
+    );
+    
+    return sortEntriesByDate(currentYearEntries, true).map(entry => entry.date);
+  }
+  
+  /**
+   * Find the next page with an entry after the given date
+   */
+  getNextPageWithEntry(currentDate: Date): Date | null {
+    const pagesWithEntries = this.getPagesWithEntries();
+    const currentTime = currentDate.getTime();
+    
+    for (const pageDate of pagesWithEntries) {
+      if (pageDate.getTime() > currentTime) {
+        return pageDate;
+      }
+    }
+    
+    return null;
+  }
+  
+  /**
+   * Find the previous page with an entry before the given date
+   */
+  getPreviousPageWithEntry(currentDate: Date): Date | null {
+    const pagesWithEntries = this.getPagesWithEntries().reverse(); // Reverse for backward search
+    const currentTime = currentDate.getTime();
+    
+    for (const pageDate of pagesWithEntries) {
+      if (pageDate.getTime() < currentTime) {
+        return pageDate;
+      }
+    }
+    
+    return null;
+  }
+  
+  /**
+   * Get comprehensive navigation state for the current page
+   */
+  getNavigationState(currentDate: Date): {
+    currentDate: Date;
+    currentPageNumber: number;
+    totalPages: number;
+    canGoNext: boolean;
+    canGoPrevious: boolean;
+    nextDate: Date | null;
+    previousDate: Date | null;
+    hasCurrentEntry: boolean;
+    currentEntry?: JournalEntry;
+    nextPageWithEntry: Date | null;
+    previousPageWithEntry: Date | null;
+    isToday: boolean;
+    isFuture: boolean;
+  } {
+    const currentPageNumber = this.getPageNumber(currentDate);
+    const totalPages = this.getTotalPages();
+    const nextDate = this.getNextPage(currentDate);
+    const previousDate = this.getPreviousPage(currentDate);
+    const currentEntry = this.getEntryForPage(currentDate);
+    
+    return {
+      currentDate,
+      currentPageNumber,
+      totalPages,
+      canGoNext: nextDate !== null,
+      canGoPrevious: previousDate !== null,
+      nextDate,
+      previousDate,
+      hasCurrentEntry: !!currentEntry,
+      currentEntry,
+      nextPageWithEntry: this.getNextPageWithEntry(currentDate),
+      previousPageWithEntry: this.getPreviousPageWithEntry(currentDate),
+      isToday: isToday(currentDate),
+      isFuture: isFuture(currentDate)
+    };
+  }
 }
 
 /**

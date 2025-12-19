@@ -272,7 +272,7 @@ describe('Journal Utilities', () => {
       expect(nav.canTurnPrevious).toBe(true);
       expect(nav.canTurnNext).toBe(true);
       expect(nav.currentDayOfYear).toBe(15);
-      expect(nav.totalDaysInYear).toBe(365);
+      expect(nav.totalDaysInYear).toBe(366); // 2024 is a leap year
     });
   });
 
