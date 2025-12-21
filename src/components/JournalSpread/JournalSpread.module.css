@@ -319,6 +319,13 @@
   
   .pageDate {
     font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 600;
+  }
+  
+  .dayOfYear {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
   }
   
   .contentArea {
@@ -330,6 +337,28 @@
   
   .emptyPlaceholder {
     font-size: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
+  }
+  
+  .wordCount {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
+  }
+  
+  .validationHint {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
+  }
+  
+  .actionButton {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
+  }
+  
+  .pageIndicator {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
   }
 }
 
@@ -380,6 +409,13 @@
   
   .pageDate {
     font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 600;
+  }
+  
+  .dayOfYear {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
   }
   
   .contentArea {
@@ -392,12 +428,16 @@
   
   .emptyPlaceholder {
     font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
   }
   
   .actionButton {
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 13px;
     min-height: 44px; /* Maintain touch target */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
   }
   
   .wordCountDisplay {
@@ -408,10 +448,14 @@
   
   .wordCount {
     font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
   }
   
   .validationHint {
     font-size: 11px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
   }
   
   .navigationControls {
@@ -426,6 +470,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 500;
   }
 }
 
