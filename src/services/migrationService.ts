@@ -16,6 +16,7 @@ import {
   AnalyticsPreferences,
   TimeRange
 } from '@/types';
+import { initializeAllPrompts, getCurrentDayOfYear } from '@/utils/promptUtils';
 
 // Current migration version
 const CURRENT_MIGRATION_VERSION = '3.0.0';
@@ -113,20 +114,22 @@ function createDefaultAnalyticsPreferences(): AnalyticsPreferences {
  * Requirements: 3.1, 3.2, 3.3
  */
 function createDefaultPromptTracks(): PromptTrack[] {
+  const currentDay = getCurrentDayOfYear();
+  
   return [
     {
       id: 'inner-child',
       name: 'Inner Child',
       description: 'Gentle prompts to reconnect with your playful, curious, and authentic self',
       totalPrompts: 365,
-      currentDay: 1
+      currentDay: Math.min(currentDay, 365)
     },
     {
       id: 'inner-teenager',
       name: 'Inner Teenager',
       description: 'Reflective prompts to explore identity, boundaries, and emotional growth',
       totalPrompts: 365,
-      currentDay: 1
+      currentDay: Math.min(currentDay, 365)
     }
   ];
 }
@@ -158,7 +161,7 @@ function migrateV2ToV3(v2Data: EmoChildV2Storage): EmoChildV3Storage {
     // Add new v3 features with defaults
     journalEntries: [],
     promptTracks: createDefaultPromptTracks(),
-    prompts: [], // Will be populated when prompt system is initialized
+    prompts: initializeAllPrompts(), // Initialize all prompts for the year
     analyticsPreferences: createDefaultAnalyticsPreferences(),
     migrationVersion: CURRENT_MIGRATION_VERSION
   };
@@ -291,7 +294,7 @@ export function performMigration(): MigrationResult {
         microSentenceIndex: 0,
         journalEntries: [],
         promptTracks: createDefaultPromptTracks(),
-        prompts: [],
+        prompts: initializeAllPrompts(), // Initialize all prompts for the year
         analyticsPreferences: createDefaultAnalyticsPreferences(),
         migrationVersion: CURRENT_MIGRATION_VERSION
       };
@@ -383,7 +386,7 @@ export function loadV3Data(): EmoChildV3Storage | null {
       // v3 extensions with defaults
       journalEntries: journalEntries ? JSON.parse(journalEntries) : [],
       promptTracks: promptTracks ? JSON.parse(promptTracks) : createDefaultPromptTracks(),
-      prompts: prompts ? JSON.parse(prompts) : [],
+      prompts: prompts ? JSON.parse(prompts) : initializeAllPrompts(), // Initialize if missing
       analyticsPreferences: analyticsPreferences ? JSON.parse(analyticsPreferences) : createDefaultAnalyticsPreferences(),
       migrationVersion: getCurrentMigrationVersion() || '2.0.0'
     };
