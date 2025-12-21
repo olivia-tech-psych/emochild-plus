@@ -8,6 +8,8 @@
 
 import React, { useState } from 'react';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { EmotionChart } from '@/components/EmotionChart';
+import { PatternVisualization } from '@/components/PatternVisualization';
 import { TimeRange } from '@/types';
 import styles from './AnalyticsDashboard.module.css';
 
@@ -151,30 +153,84 @@ export function AnalyticsDashboard({ className }: AnalyticsDashboardProps) {
             <div className={styles.patterns}>
               <h3>Your Emotional Patterns</h3>
               
-              {analytics.patterns.map((pattern, index) => (
-                <div key={`${pattern.type}-${index}`} className={styles.patternCard}>
-                  <div className={styles.patternHeader}>
-                    <h4 className={styles.patternTitle}>
-                      {getPatternTitle(pattern.type)}
-                    </h4>
+              {/* Data Visualizations using new components */}
+              <div className={styles.visualizations}>
+                {/* Expression Ratio Chart */}
+                {analytics.chartData['expression-ratio'] && (
+                  <div className={styles.visualizationSection}>
+                    <EmotionChart
+                      data={analytics.chartData['expression-ratio']}
+                      chartType="pie"
+                      colorScheme="pastel"
+                      accessibleDescription="Expression ratio showing expressed vs suppressed emotions"
+                      title="Expression Balance"
+                      className={styles.chartContainer}
+                    />
                   </div>
-                  
-                  <div className={styles.patternContent}>
-                    <p className={styles.patternInsight}>{pattern.insight}</p>
+                )}
+
+                {/* Common Emotions Chart */}
+                {analytics.chartData['common-emotions'] && (
+                  <div className={styles.visualizationSection}>
+                    <EmotionChart
+                      data={analytics.chartData['common-emotions']}
+                      chartType="bar"
+                      colorScheme="pastel"
+                      accessibleDescription="Most common emotions frequency chart"
+                      title="Most Common Emotions"
+                      className={styles.chartContainer}
+                    />
+                  </div>
+                )}
+
+                {/* Streak Visualization */}
+                <div className={styles.visualizationSection}>
+                  <PatternVisualization
+                    patterns={analytics.patterns}
+                    visualType="streak"
+                    showEncouragement={true}
+                    title="Expression Streaks"
+                    className={styles.patternContainer}
+                  />
+                </div>
+
+                {/* Trend Chart */}
+                {analytics.chartData['trend'] && (
+                  <div className={styles.visualizationSection}>
+                    <EmotionChart
+                      data={analytics.chartData['trend']}
+                      chartType="line"
+                      colorScheme="pastel"
+                      accessibleDescription="Emotional expression trends over time"
+                      title="Expression Trends"
+                      className={styles.chartContainer}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Pattern Insights */}
+              <div className={styles.patternInsights}>
+                {analytics.patterns.map((pattern, index) => (
+                  <div key={`${pattern.type}-${index}`} className={styles.patternCard}>
+                    <div className={styles.patternHeader}>
+                      <h4 className={styles.patternTitle}>
+                        {getPatternTitle(pattern.type)}
+                      </h4>
+                    </div>
                     
-                    {pattern.encouragement && (
-                      <p className={styles.patternEncouragement}>
-                        💙 {pattern.encouragement}
-                      </p>
-                    )}
-                    
-                    {/* Simple data visualization */}
-                    <div className={styles.patternData}>
-                      {renderPatternData(pattern)}
+                    <div className={styles.patternContent}>
+                      <p className={styles.patternInsight}>{pattern.insight}</p>
+                      
+                      {pattern.encouragement && (
+                        <p className={styles.patternEncouragement}>
+                          💙 {pattern.encouragement}
+                        </p>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
@@ -208,74 +264,6 @@ function getPatternTitle(type: string): string {
       return 'Emotional Trends';
     default:
       return 'Pattern Analysis';
-  }
-}
-
-/**
- * Render simple data visualization for patterns
- * Requirements: 4.3 - Soft, non-judgmental data visualizations
- */
-function renderPatternData(pattern: any): React.ReactNode {
-  switch (pattern.type) {
-    case 'expression-ratio':
-      return (
-        <div className={styles.ratioVisualization}>
-          <div className={styles.ratioBar}>
-            <div 
-              className={styles.ratioFill}
-              style={{ width: `${pattern.data.percentage}%` }}
-              aria-label={`${pattern.data.percentage}% expression rate`}
-            />
-          </div>
-          <div className={styles.ratioLabels}>
-            <span>Expressed: {pattern.data.expressed}</span>
-            <span>Suppressed: {pattern.data.suppressed}</span>
-          </div>
-        </div>
-      );
-      
-    case 'common-emotions':
-      return (
-        <div className={styles.emotionsList}>
-          {pattern.data.emotions.slice(0, 3).map((emotion: any, index: number) => (
-            <div key={emotion.emotion} className={styles.emotionItem}>
-              <span className={styles.emotionName}>{emotion.emotion}</span>
-              <span className={styles.emotionCount}>{emotion.count} times</span>
-            </div>
-          ))}
-        </div>
-      );
-      
-    case 'streak':
-      return (
-        <div className={styles.streakVisualization}>
-          <div className={styles.streakItem}>
-            <span className={styles.streakLabel}>Current:</span>
-            <span className={styles.streakValue}>{pattern.data.currentStreak} days</span>
-          </div>
-          <div className={styles.streakItem}>
-            <span className={styles.streakLabel}>Best:</span>
-            <span className={styles.streakValue}>{pattern.data.longestStreak} days</span>
-          </div>
-        </div>
-      );
-      
-    case 'trend':
-      return (
-        <div className={styles.trendVisualization}>
-          <div className={styles.trendDirection}>
-            <span className={styles.trendLabel}>Direction:</span>
-            <span className={`${styles.trendValue} ${styles[pattern.data.trendDirection]}`}>
-              {pattern.data.trendDirection === 'improving' && '📈 Improving'}
-              {pattern.data.trendDirection === 'declining' && '📉 Declining'}
-              {pattern.data.trendDirection === 'stable' && '➡️ Stable'}
-            </span>
-          </div>
-        </div>
-      );
-      
-    default:
-      return null;
   }
 }
 

@@ -231,11 +231,38 @@
   text-align: center;
 }
 
+/* Visualizations grid */
+.visualizations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.visualizationSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.chartContainer {
+  flex: 1;
+}
+
+.patternContainer {
+  flex: 1;
+}
+
+/* Pattern insights */
+.patternInsights {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .patternCard {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   border: 1px solid #F2C6DE;
 }
@@ -435,6 +462,11 @@
   .timeRangeButton {
     flex: 1;
     min-width: auto;
+  }
+  
+  .visualizations {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .streakVisualization {
