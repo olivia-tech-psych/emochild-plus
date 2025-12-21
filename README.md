@@ -36,6 +36,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **Migration Service**: Automatic data migration from V2 to V3 format with error handling, data validation, and seamless upgrade path for existing users
 - **Analytics Utilities**: Local emotional pattern analysis including expression ratios, common emotions, streaks, trends, and chart data generation with complete privacy (no external requests)
 - **Prompt System Utilities**: Daily prompt unlocking logic, Inner Child and Inner Teenager prompt tracks (365 prompts each), completion tracking, and category-based organization
+- **PromptTrackSelector Component**: Interactive component for choosing between Inner Child and Inner Teenager prompt tracks with progress visualization, accessibility support, and gentle styling that emphasizes optional engagement without pressure
 - **Journal Page Navigation**: Advanced page navigation system with chronological ordering, leap year support, future date restrictions, and comprehensive navigation state management
 - **Property-Based Testing**: fast-check integration for testing creature brightness calculations and text contrast accessibility
 - **Unit Testing**: Comprehensive test coverage using Vitest and React Testing Library for all V2 and V3 components
@@ -83,6 +84,11 @@ emochild/
 │   │   │   ├── PageCurl.tsx
 │   │   │   ├── PageCurl.test.tsx
 │   │   │   ├── PageCurl.module.css
+│   │   │   └── index.ts
+│   │   ├── PromptTrackSelector/      # Prompt track selection interface (V3)
+│   │   │   ├── PromptTrackSelector.tsx
+│   │   │   ├── PromptTrackSelector.test.tsx
+│   │   │   ├── PromptTrackSelector.module.css
 │   │   │   └── index.ts
 │   │   ├── QuickEmotions/           # Quick emotion buttons for faster logging
 │   │   ├── SafetyBar/               # Inner safety score progress bar
@@ -582,3 +588,17 @@ npm run test:watch
 - **Code Consistency**: Improved consistency with the rest of the application's color management approach
 - **Maintainability Enhancement**: Simplified color management by centralizing color definitions in the global theme system
 - Minor refactoring to improve code organization and maintainability
+
+### [2025-12-21 22:15] PromptTrackSelector Component Implementation
+- **PromptTrackSelector Component**: Implemented interactive component for choosing between Inner Child and Inner Teenager prompt tracks with comprehensive functionality
+- **Track Selection Interface**: Created user-friendly interface with track cards displaying name, description, progress, and current day information
+- **Progress Visualization**: Added visual progress bars showing completion status (current day / total prompts) with smooth animations
+- **Accessibility Support**: Comprehensive ARIA labels, keyboard navigation (Enter/Space keys), screen reader compatibility, and focus management
+- **Gentle Styling**: Designed with soft pastel colors, rounded corners, and encouraging messaging that emphasizes optional engagement without pressure
+- **Interactive States**: Implemented hover effects, selection states, disabled states, and visual feedback for better user experience
+- **Responsive Design**: Mobile-optimized layout with touch-friendly interactions and adaptive grid system
+- **Optional Messaging**: Added "Optional • No pressure" labels to reinforce the non-mandatory nature of prompt engagement
+- **Empty State Handling**: Graceful handling of scenarios with no available tracks with helpful messaging
+- **Comprehensive Testing**: Full test coverage including user interactions, keyboard navigation, accessibility, progress calculations, and edge cases
+- **High Contrast Support**: Enhanced accessibility with high contrast mode support and reduced motion preferences
+- Requirements: 3.1, 3.4 - Choose between Inner Child and Inner Teenager prompt tracks with progress tracking

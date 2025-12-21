@@ -379,7 +379,7 @@ export function validatePromptSystemIntegrity(
     errors.push(`Expected 2 tracks, found ${tracks.length}`);
   }
   
-  const expectedTrackIds = ['inner-child', 'inner-teenager'];
+  const expectedTrackIds: ('inner-child' | 'inner-teenager')[] = ['inner-child', 'inner-teenager'];
   const actualTrackIds = tracks.map(t => t.id);
   
   for (const expectedId of expectedTrackIds) {
