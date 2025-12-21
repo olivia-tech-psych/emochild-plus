@@ -1,0 +1,572 @@
+/**
+ * InsightDashboard Component Styles
+ * Encouraging design with pastel colors and gentle aesthetics
+ * Requirements: 4.1, 4.5
+ */
+
+.dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #fef9f3 0%, #f8f4f0 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  min-height: 600px;
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.header h2 {
+  color: #5a4a6b;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: #8b7a9b;
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Time Range Selector */
+.timeRangeSelector {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.selectorLabel {
+  display: block;
+  color: #6b5b7b;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.timeRangeButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.timeRangeButton {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #e8dce8;
+  background: white;
+  color: #6b5b7b;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.timeRangeButton:hover {
+  border-color: #d4c5d4;
+  background: #faf8fa;
+  transform: translateY(-1px);
+}
+
+.timeRangeButton.active {
+  background: #D4567A;
+  color: white;
+  border-color: #D4567A;
+  box-shadow: 0 2px 8px rgba(212, 86, 122, 0.3);
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #8b7a9b;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0e8f0;
+  border-top: 3px solid #D4567A;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error {
+  text-align: center;
+  padding: 2rem;
+  background: #fef7f7;
+  border: 1px solid #f5d5d5;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.errorIcon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.error h3 {
+  color: #8b5a5a;
+  margin-bottom: 0.5rem;
+}
+
+.error p {
+  color: #a67a7a;
+  margin-bottom: 1.5rem;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: #D4567A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.retryButton:hover {
+  background: #c04968;
+}
+
+/* No Data Container */
+.noDataContainer {
+  text-align: center;
+}
+
+.encouragingMessage {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f4f8 0%, #f0e8f0 100%);
+  border-radius: 16px;
+  border: 2px solid #e8dce8;
+}
+
+.encouragingIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.encouragingMessage h3 {
+  color: #5a4a6b;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.encouragingMessage p {
+  color: #7a6a8a;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.encouragingSubtext {
+  color: #9a8aaa;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Placeholder Visualizations */
+.placeholderVisualizations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.placeholderSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #f0e8f0;
+  text-align: center;
+}
+
+.placeholderSection h4 {
+  color: #6b5b7b;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.placeholderChart {
+  margin-bottom: 1rem;
+}
+
+.placeholderPie {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  overflow: hidden;
+}
+
+.placeholderSlice {
+  flex: 1;
+  opacity: 0.3;
+}
+
+.placeholderBars {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 0.5rem;
+  height: 80px;
+  margin-bottom: 1rem;
+}
+
+.placeholderBar {
+  width: 20px;
+  opacity: 0.3;
+  border-radius: 4px 4px 0 0;
+}
+
+.placeholderStreak {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.placeholderStreakDay {
+  width: 24px;
+  height: 24px;
+  background: #e8dce8;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.placeholderText {
+  color: #9a8aaa;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Overview Stats */
+.overviewStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.statCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #f0e8f0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.statIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #5a4a6b;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.statLabel {
+  color: #8b7a9b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Insufficient Data */
+.insufficientData {
+  background: linear-gradient(135deg, #f8f6f8 0%, #f0e8f0 100%);
+  border: 2px solid #e8dce8;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.insufficientDataContent h3 {
+  color: #5a4a6b;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.insufficientDataContent p {
+  color: #7a6a8a;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.encouragementText {
+  color: #6b5b7b;
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Insights Section */
+.insightsSection {
+  margin-bottom: 2rem;
+}
+
+.insightsSection h3 {
+  color: #5a4a6b;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Visualizations Grid */
+.visualizations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.visualizationCard {
+  background: white;
+  border: 2px solid #f0e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.visualizationCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.cardHeader h4 {
+  color: #5a4a6b;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.cardDescription {
+  color: #8b7a9b;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.chartContainer {
+  min-height: 200px;
+}
+
+.patternContainer {
+  min-height: 150px;
+}
+
+/* Pattern Insights */
+.patternInsights {
+  margin-top: 2rem;
+}
+
+.patternInsights h4 {
+  color: #5a4a6b;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.insightCard {
+  background: linear-gradient(135deg, #faf8fa 0%, #f5f0f5 100%);
+  border: 2px solid #e8dce8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.insightContent {
+  text-align: center;
+}
+
+.insightText {
+  color: #6b5b7b;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.encouragementMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(212, 86, 122, 0.1);
+  border: 1px solid rgba(212, 86, 122, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.encouragementIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.encouragementText {
+  color: #8b5a6b;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Dashboard Footer */
+.dashboardFooter {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f0e8f0;
+  text-align: center;
+}
+
+.dataInfo {
+  margin-bottom: 1.5rem;
+}
+
+.dataFreshness {
+  color: #9a8aaa;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.footerEncouragement {
+  background: linear-gradient(135deg, #f8f6f8 0%, #f0e8f0 100%);
+  border: 2px solid #e8dce8;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.footerEncouragement p {
+  color: #6b5b7b;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.5rem;
+  }
+  
+  .header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .timeRangeButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .timeRangeButton {
+    width: 200px;
+  }
+  
+  .overviewStats {
+    grid-template-columns: 1fr;
+  }
+  
+  .visualizations {
+    grid-template-columns: 1fr;
+  }
+  
+  .placeholderVisualizations {
+    grid-template-columns: 1fr;
+  }
+  
+  .statCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .statIcon {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 1rem;
+  }
+  
+  .header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .encouragingMessage {
+    padding: 1.5rem;
+  }
+  
+  .encouragingMessage h3 {
+    font-size: 1.5rem;
+  }
+  
+  .encouragingMessage p {
+    font-size: 1rem;
+  }
+  
+  .visualizationCard {
+    padding: 1rem;
+  }
+  
+  .insightCard {
+    padding: 1rem;
+  }
+}
