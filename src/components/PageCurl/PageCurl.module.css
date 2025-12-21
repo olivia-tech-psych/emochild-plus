@@ -19,8 +19,25 @@
   font-size: 18px;
   font-weight: bold;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Allow 3D transforms to show */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  backface-visibility: visible;
+}
+
+.pageCurlButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #F8E8ED; /* Light pink back side of page */
+  border-radius: 50%;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  z-index: -1;
 }
 
 .pageCurlButton:hover:not(:disabled) {
@@ -87,58 +104,119 @@
 /* Curl animation classes */
 .curling {
   animation: pageCurl var(--animation-duration, 500ms) ease-in-out;
+  z-index: 10; /* Bring to front during animation */
 }
 
 .previous.curling {
   animation: pageCurlLeft var(--animation-duration, 500ms) ease-in-out;
+  z-index: 10;
 }
 
 .next.curling {
   animation: pageCurlRight var(--animation-duration, 500ms) ease-in-out;
+  z-index: 10;
 }
 
-/* Page curl keyframe animations */
-@keyframes pageCurlLeft {
+/* Default curl animation for when direction isn't specified */
+@keyframes pageCurl {
   0% {
-    transform: scale(1.1) rotate(-5deg);
-  }
-  25% {
-    transform: scale(1.2) rotate(-15deg) translateX(-5px);
-    box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.4);
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
   50% {
-    transform: scale(1.15) rotate(-10deg) translateX(-3px);
-    box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.3);
-  }
-  75% {
-    transform: scale(1.1) rotate(-5deg) translateX(-1px);
-    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+    transform: scale(1.3) rotate(10deg);
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
+    background: var(--color-journal-border);
   }
   100% {
-    transform: scale(1.1) rotate(-5deg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--color-journal-binding);
+  }
+}
+
+/* Page curl keyframe animations - Realistic 3D paper curl like Google Play Books */
+@keyframes pageCurlLeft {
+  0% {
+    transform: scale(1) rotate(0deg) translateX(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--color-journal-binding);
+    transform-origin: bottom-left;
+  }
+  15% {
+    transform: scale(1.1) rotateY(-15deg) rotateX(5deg) translateX(-5px) translateZ(10px);
+    box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.4);
+    background: var(--color-journal-border);
+  }
+  30% {
+    transform: scale(1.2) rotateY(-30deg) rotateX(10deg) translateX(-10px) translateZ(20px);
+    box-shadow: -10px 10px 25px rgba(0, 0, 0, 0.6);
+    background: #A0456B;
+  }
+  50% {
+    transform: scale(1.4) rotateY(-45deg) rotateX(15deg) translateX(-15px) translateZ(30px);
+    box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.8);
+    background: #8B3A5C;
+    border-radius: 50% 20% 50% 20%;
+  }
+  70% {
+    transform: scale(1.3) rotateY(-35deg) rotateX(12deg) translateX(-12px) translateZ(25px);
+    box-shadow: -12px 12px 30px rgba(0, 0, 0, 0.7);
+    background: #A0456B;
+    border-radius: 50% 30% 50% 30%;
+  }
+  85% {
+    transform: scale(1.1) rotateY(-20deg) rotateX(8deg) translateX(-8px) translateZ(15px);
+    box-shadow: -8px 8px 20px rgba(0, 0, 0, 0.5);
+    background: var(--color-journal-border);
+  }
+  100% {
+    transform: scale(1) rotate(0deg) translateX(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--color-journal-binding);
+    transform-origin: bottom-left;
   }
 }
 
 @keyframes pageCurlRight {
   0% {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1) rotate(0deg) translateX(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--color-journal-binding);
+    transform-origin: bottom-right;
   }
-  25% {
-    transform: scale(1.2) rotate(15deg) translateX(5px);
+  15% {
+    transform: scale(1.1) rotateY(15deg) rotateX(5deg) translateX(5px) translateZ(10px);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+    background: var(--color-journal-border);
+  }
+  30% {
+    transform: scale(1.2) rotateY(30deg) rotateX(10deg) translateX(10px) translateZ(20px);
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.6);
+    background: #A0456B;
   }
   50% {
-    transform: scale(1.15) rotate(10deg) translateX(3px);
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.4) rotateY(45deg) rotateX(15deg) translateX(15px) translateZ(30px);
+    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.8);
+    background: #8B3A5C;
+    border-radius: 20% 50% 20% 50%;
   }
-  75% {
-    transform: scale(1.1) rotate(5deg) translateX(1px);
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  70% {
+    transform: scale(1.3) rotateY(35deg) rotateX(12deg) translateX(12px) translateZ(25px);
+    box-shadow: 12px 12px 30px rgba(0, 0, 0, 0.7);
+    background: #A0456B;
+    border-radius: 30% 50% 30% 50%;
+  }
+  85% {
+    transform: scale(1.1) rotateY(20deg) rotateX(8deg) translateX(8px) translateZ(15px);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+    background: var(--color-journal-border);
   }
   100% {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1) rotate(0deg) translateX(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: var(--color-journal-binding);
+    transform-origin: bottom-right;
   }
 }
 
@@ -201,15 +279,39 @@
   .pageCurlButton {
     width: 52px;
     height: 52px;
+    font-size: 20px;
   }
   
   .pageCurlButton:hover {
     transform: none;
-    background: #8B4A6B;
+    background: var(--color-journal-binding);
   }
   
   .pageCurlButton:active:not(:disabled) {
-    background: #D4567A;
+    background: var(--color-journal-border);
     transform: scale(0.95);
+  }
+  
+  /* Ensure animations still work on mobile */
+  .curling,
+  .previous.curling,
+  .next.curling {
+    animation-duration: var(--animation-duration, 500ms);
+  }
+}
+
+/* Additional mobile responsiveness */
+@media (max-width: 480px) {
+  .pageCurlButton {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+  
+  /* Make animations slightly faster on mobile for better UX */
+  .curling,
+  .previous.curling,
+  .next.curling {
+    animation-duration: calc(var(--animation-duration, 500ms) * 0.8);
   }
 }

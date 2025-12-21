@@ -8,8 +8,27 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { JournalEntry, EmotionLog } from '@/types';
 import { PageCurl } from '../PageCurl';
 import { EmotionLinker } from '../EmotionLinker';
+import { MobileJournalView } from '../MobileJournalView';
 import { getSameDayEmotions } from '@/utils/journalUtils';
 import styles from './JournalSpread.module.css';
+
+// Hook to detect mobile screen size
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+  
+  return isMobile;
+};
 
 export interface JournalSpreadProps {
   /** Current date being viewed */
@@ -133,6 +152,31 @@ export function JournalSpread({
 
   // Check if current date is in the future
   const isFuture = currentDate > new Date();
+  
+  // Detect mobile for inline style overrides
+  const isMobile = useIsMobile();
+
+  // Handle mobile editing with full-screen view
+  const [showMobileEditor, setShowMobileEditor] = useState(false);
+
+  // Open mobile editor when editing on mobile
+  useEffect(() => {
+    if (isMobile && isEditing && !showMobileEditor) {
+      setShowMobileEditor(true);
+    }
+  }, [isMobile, isEditing, showMobileEditor]);
+
+  // Handle mobile editor save
+  const handleMobileSave = useCallback((content: string, entryLinkedEmotions: string[] = []) => {
+    onSave(content, entryLinkedEmotions);
+    setShowMobileEditor(false);
+  }, [onSave]);
+
+  // Handle mobile editor close
+  const handleMobileClose = useCallback(() => {
+    setShowMobileEditor(false);
+    onCancel();
+  }, [onCancel]);
 
   // Handle keyboard shortcuts when editing
   useEffect(() => {
@@ -158,11 +202,49 @@ export function JournalSpread({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isEditing, editContent, currentWordCount, handleSave, handleCancel]);
 
+  // Mobile-specific inline styles to force full width
+  const mobileContainerStyle: React.CSSProperties = isMobile ? {
+    width: '100vw',
+    maxWidth: 'none !important' as any,
+    padding: '8px',
+    margin: '0',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    position: 'relative',
+    left: '50%',
+    right: '50%',
+    marginLeft: '-50vw',
+    marginRight: '-50vw'
+  } : {};
+
+  const mobileSpreadStyle: React.CSSProperties = isMobile ? {
+    width: 'calc(100vw - 16px)',
+    maxWidth: 'none !important' as any,
+    flexDirection: 'column',
+    margin: '0'
+  } : {};
+
   return (
-    <div className={styles.journalContainer}>
-      <div className={styles.journalSpread} role="main" aria-label="Journal spread">
-        {/* Left Page */}
-        <div className={styles.journalPage} role="article" aria-label={`Left journal page for ${formatDate(currentDate)}`}>
+    <>
+      {/* Mobile Full-Screen Editor */}
+      {isMobile && (
+        <MobileJournalView
+          currentDate={currentDate}
+          entry={entry}
+          isOpen={showMobileEditor}
+          onSave={handleMobileSave}
+          onClose={handleMobileClose}
+          linkedEmotions={linkedEmotions}
+          onToggleEmotion={onToggleEmotion}
+          allEmotions={allEmotions}
+        />
+      )}
+
+      {/* Desktop/Tablet Journal Spread */}
+      <div className={styles.journalContainer} style={mobileContainerStyle}>
+        <div className={styles.journalSpread} style={mobileSpreadStyle} role="main" aria-label="Journal spread">
+        {/* Main Page (Left page on desktop, only page on mobile) */}
+        <div className={styles.journalPage} role="article" aria-label={`Journal page for ${formatDate(currentDate)}`}>
           <div className={styles.pageHeader}>
             <h2 className={styles.pageDate}>{formatDate(currentDate)}</h2>
             <span className={styles.dayOfYear} aria-label={`Day ${dayOfYear} of the year`}>
@@ -171,7 +253,8 @@ export function JournalSpread({
           </div>
           
           <div className={styles.pageContent}>
-            {isEditing ? (
+            {/* Only show editing interface on desktop/tablet, not mobile */}
+            {isEditing && !isMobile ? (
               <textarea
                 className={styles.contentArea}
                 value={editContent}
@@ -202,7 +285,8 @@ export function JournalSpread({
             )}
           </div>
 
-          {isEditing && (
+          {/* Show editing controls only on desktop/tablet */}
+          {isEditing && !isMobile && (
             <>
               <div 
                 id="word-count-display"
@@ -247,8 +331,8 @@ export function JournalSpread({
           )}
         </div>
 
-        {/* Right Page */}
-        <div className={styles.journalPage} role="article" aria-label="Right journal page">
+        {/* Right Page - Hidden on mobile, shows emotions/reflections on desktop */}
+        <div className={`${styles.journalPage} ${styles.rightPage}`} role="article" aria-label="Right journal page">
           <div className={styles.pageHeader}>
             <h3 className={styles.pageDate}>Reflections</h3>
             {entry && (
@@ -322,6 +406,63 @@ export function JournalSpread({
             )}
           </div>
         </div>
+
+        {/* Mobile Emotion Section - Only visible on mobile, integrated into main page */}
+        {isMobile && (isEditing || sameDayEmotions.length > 0 || linkedEmotions.length > 0) && (
+          <div className={styles.mobileEmotionSection}>
+            {/* Emotion Linking Section */}
+            {(isEditing || sameDayEmotions.length > 0) && onToggleEmotion && (
+              <EmotionLinker
+                availableEmotions={sameDayEmotions}
+                linkedEmotions={linkedEmotions}
+                onToggleEmotion={onToggleEmotion}
+                initiallyCollapsed={!isEditing}
+                date={currentDate}
+              />
+            )}
+            
+            {/* Linked Emotions Display (when not editing and has linked emotions) */}
+            {!isEditing && entry && linkedEmotions.length > 0 && (
+              <div role="region" aria-label="Linked emotions for this entry" style={{ marginTop: 'var(--spacing-sm)' }}>
+                <h4 style={{ 
+                  fontFamily: 'var(--font-kalam), Kalam, cursive, sans-serif', 
+                  color: 'var(--color-journal-binding)', 
+                  marginBottom: 'var(--spacing-sm)',
+                  fontSize: '16px'
+                }}>
+                  Connected Emotions:
+                </h4>
+                <div style={{ 
+                  display: 'flex', 
+                  flexWrap: 'wrap', 
+                  gap: 'var(--spacing-xs)' 
+                }}>
+                  {linkedEmotions.map((emotionId, index) => {
+                    const emotion = allEmotions.find(e => e.id === emotionId);
+                    return (
+                      <span 
+                        key={emotionId}
+                        style={{
+                          background: '#E5C2D1',
+                          color: '#5A3A4A',
+                          padding: '4px 8px',
+                          borderRadius: '12px',
+                          fontSize: '14px',
+                          fontFamily: 'var(--font-kalam), Kalam, cursive, sans-serif'
+                        }}
+                        role="listitem"
+                        aria-label={`Linked emotion ${index + 1}: ${emotion?.text || emotionId}`}
+                        title={emotion?.text || emotionId}
+                      >
+                        {emotion?.text || emotionId}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Navigation Controls */}
@@ -345,5 +486,6 @@ export function JournalSpread({
         />
       </div>
     </div>
+    </>
   );
 }

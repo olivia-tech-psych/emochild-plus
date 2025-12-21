@@ -11,6 +11,8 @@
   min-height: 70vh;
   padding: var(--spacing-lg);
   perspective: 1000px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .journalSpread {
@@ -23,8 +25,9 @@
     0 8px 32px rgba(0, 0, 0, 0.3),
     inset 0 2px 4px rgba(255, 255, 255, 0.1);
   position: relative;
-  max-width: 800px;
+  max-width: 800px; /* Only applies on desktop */
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Central binding shadow */
@@ -264,18 +267,54 @@
 /* Responsive design for mobile */
 @media (max-width: 768px) {
   .journalContainer {
-    padding: var(--spacing-md);
+    padding: 0 !important; /* Remove all padding */
     min-height: 60vh;
+    width: 100vw !important; /* Use viewport width */
+    max-width: none !important;
+    box-sizing: border-box;
+    margin: 0 !important; /* Remove any margins */
+    justify-content: flex-start; /* Align to start instead of center */
+    align-items: stretch;
   }
   
   .journalSpread {
     flex-direction: column;
     gap: var(--spacing-sm);
-    max-width: none;
+    max-width: none !important; /* Force override desktop max-width */
+    width: 100vw !important; /* Full viewport width */
+    box-sizing: border-box;
+    margin: 0 !important; /* Remove auto centering */
+    padding: 12px 8px !important; /* Minimal padding for breathing room */
+  }
+  
+  /* Hide the central binding shadow on mobile since pages are stacked */
+  .journalSpread::before {
+    display: none;
+  }
+  
+  /* Hide right page on mobile - single page layout */
+  .rightPage {
+    display: none !important;
   }
   
   .journalPage {
     min-height: 300px;
+    width: 100% !important;
+    flex: none; /* Don't allow flex shrinking */
+    box-sizing: border-box;
+    margin: 0 !important; /* Remove any margins */
+  }
+  
+  /* Mobile emotion section styling */
+  .mobileEmotionSection {
+    background: var(--color-journal-page);
+    border: 3px solid var(--color-journal-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 2px rgba(255, 255, 255, 0.8);
   }
   
   .pageDate {
@@ -284,6 +323,9 @@
   
   .contentArea {
     font-size: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
+    line-height: 1.5;
   }
   
   .emptyPlaceholder {
@@ -293,12 +335,47 @@
 
 @media (max-width: 480px) {
   .journalContainer {
-    padding: var(--spacing-sm);
+    padding: 0 !important; /* No padding */
+    min-height: 50vh;
+    width: 100vw !important; /* Use viewport width */
+    max-width: none !important;
+    margin: 0 !important;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+  
+  .journalSpread {
+    padding: 8px 4px !important; /* Consistent padding */
+    border-radius: 8px;
+    width: 100vw !important; /* Full viewport width */
+    max-width: none !important;
+    margin: 0 !important;
+  }
+  
+  /* Hide right page on mobile - single page layout */
+  .rightPage {
+    display: none !important;
   }
   
   .journalPage {
     padding: var(--spacing-md);
     min-height: 250px;
+    border-width: 2px; /* Thinner borders on small screens */
+    width: 100% !important;
+    box-sizing: border-box;
+    margin: 0 !important; /* Remove any margins */
+  }
+  
+  /* Mobile emotion section styling */
+  .mobileEmotionSection {
+    background: var(--color-journal-page);
+    border: 2px solid var(--color-journal-border);
+    border-radius: 8px;
+    padding: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 2px rgba(255, 255, 255, 0.8);
   }
   
   .pageDate {
@@ -307,6 +384,10 @@
   
   .contentArea {
     font-size: 14px;
+    min-height: 150px; /* Smaller on mobile */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* More readable on mobile */
+    font-weight: 400;
+    line-height: 1.5;
   }
   
   .emptyPlaceholder {
@@ -316,6 +397,7 @@
   .actionButton {
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 13px;
+    min-height: 44px; /* Maintain touch target */
   }
   
   .wordCountDisplay {
@@ -330,6 +412,20 @@
   
   .validationHint {
     font-size: 11px;
+  }
+  
+  .navigationControls {
+    margin-top: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .pageIndicator {
+    font-size: 14px;
+    text-align: center;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -361,5 +457,20 @@
   
   .actionButton {
     border: 2px solid currentColor;
+  }
+}
+
+/* Force full width on all mobile devices - highest specificity */
+@media screen and (max-width: 768px) {
+  .journalSpread {
+    max-width: none !important;
+    width: calc(100vw - 16px) !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .journalSpread {
+    max-width: none !important;
+    width: calc(100vw - 8px) !important;
   }
 }

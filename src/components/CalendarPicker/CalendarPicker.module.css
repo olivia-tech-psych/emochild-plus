@@ -1,0 +1,343 @@
+/**
+ * CalendarPicker Component Styles
+ * Mobile-first calendar with pastel pink + dark pink color palette
+ * "Feels like opening a soft paper insert inside a journal"
+ */
+
+.calendarOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 200ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.calendarContainer {
+  background: #F8E8ED; /* Soft pastel pink (paper-like) */
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(90, 58, 74, 0.15); /* Soft shadow */
+  padding: var(--spacing-lg);
+  max-width: 400px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  font-family: var(--font-kalam), 'Kalam', cursive, sans-serif;
+  color: #5A3A4A; /* Deep rose/muted plum */
+  position: relative;
+}
+
+/* Mobile: bottom sheet style */
+.calendarContainer.mobile {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: auto;
+  width: 100%;
+  max-width: none;
+  border-radius: 16px 16px 0 0;
+  animation: slideUp 300ms ease-out;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Desktop: floating popover */
+.calendarContainer.desktop {
+  animation: scaleIn 200ms ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid #E5C2D1; /* Slightly darker pink than background */
+}
+
+.monthYear {
+  font-size: 20px;
+  font-weight: 600;
+  color: #D4567A; /* Muted dark pink/rose for highlights */
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.navButton {
+  background: transparent;
+  border: 2px solid #D4567A; /* Muted dark pink/rose for highlights */
+  color: #D4567A; /* Muted dark pink/rose for highlights */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.navButton:hover:not(:disabled) {
+  background: #D4567A; /* Muted dark pink/rose for highlights */
+  color: #F8E8ED; /* Soft pastel pink (paper-like) */
+  transform: scale(1.05);
+}
+
+.navButton:active {
+  transform: scale(0.95);
+}
+
+.swipeHint {
+  text-align: center;
+  font-size: 12px;
+  color: #8B6B7A; /* Lighter text for secondary elements */
+  margin-bottom: var(--spacing-sm);
+  font-style: italic;
+}
+
+.dayLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.dayLabel {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8B6B7A; /* Lighter text for secondary elements */
+  padding: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+}
+
+.calendarDay {
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5A3A4A; /* Deep rose/muted plum */
+  transition: all var(--transition-fast);
+  position: relative;
+  font-family: inherit;
+  margin: 0 auto;
+}
+
+.calendarDay:hover:not(:disabled):not(.future) {
+  background: rgba(212, 86, 122, 0.1);
+  border-color: #D4567A; /* Muted dark pink/rose for highlights */
+  transform: scale(1.05);
+}
+
+.calendarDay:active:not(:disabled):not(.future) {
+  transform: scale(0.95);
+}
+
+.dayNumber {
+  line-height: 1;
+}
+
+/* Today styling - dark pink outline */
+.calendarDay.today {
+  border-color: #D4567A; /* Dark pink outline */
+  font-weight: 700;
+}
+
+/* Selected styling - filled dark pink circle */
+.calendarDay.selected {
+  background: #D4567A; /* Filled dark pink circle */
+  color: #F8E8ED; /* Soft pastel pink (paper-like) */
+  border-color: #D4567A; /* Filled dark pink circle */
+  font-weight: 700;
+}
+
+.calendarDay.selected:hover {
+  background: #D4567A; /* Filled dark pink circle */
+  transform: scale(1.05);
+}
+
+/* Other month dates - reduced opacity */
+.calendarDay.otherMonth {
+  color: #8B6B7A; /* Lighter text for secondary elements */
+  opacity: 0.5;
+}
+
+/* Future dates - disabled */
+.calendarDay.future {
+  color: #8B6B7A; /* Lighter text for secondary elements */
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.calendarDay.future:hover {
+  transform: none;
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Entry dot for dates with journal entries */
+.entryDot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #D4567A; /* Small dark pink dot */
+  border-radius: 50%;
+}
+
+.calendarDay.selected .entryDot {
+  background: #F8E8ED; /* Soft pastel pink (paper-like) */
+}
+
+.closeButton {
+  background: #D4567A; /* Muted dark pink/rose for highlights */
+  color: #F8E8ED; /* Soft pastel pink (paper-like) */
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  font-family: inherit;
+  margin-top: var(--spacing-md);
+}
+
+.closeButton:hover {
+  background: #B8456A;
+  transform: translateY(-1px);
+}
+
+.closeButton:active {
+  transform: translateY(0);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .calendarOverlay,
+  .calendarContainer,
+  .navButton,
+  .calendarDay,
+  .closeButton {
+    animation: none;
+    transition: none;
+  }
+  
+  .navButton:hover,
+  .calendarDay:hover,
+  .closeButton:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .calendarContainer {
+    border: 3px solid #D4567A; /* Muted dark pink/rose for highlights */
+  }
+  
+  .calendarDay {
+    border-width: 3px;
+  }
+  
+  .navButton {
+    border-width: 3px;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .calendarContainer.mobile {
+    padding: var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  }
+  
+  .monthYear {
+    font-size: 18px;
+  }
+  
+  .navButton {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  .calendarDay {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+  
+  .dayLabel {
+    font-size: 11px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .calendarDay {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .navButton {
+    width: 44px;
+    height: 44px;
+  }
+}

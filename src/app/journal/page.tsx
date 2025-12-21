@@ -9,6 +9,7 @@
 import React, { useState, useCallback } from 'react';
 import { JournalSpread } from '@/components/JournalSpread';
 import { ExportButton } from '@/components/ExportButton';
+import { CalendarPicker } from '@/components/CalendarPicker';
 import { JournalEntry } from '@/types';
 import { useEmotion } from '@/context/EmotionContext';
 import styles from './page.module.css';
@@ -18,6 +19,7 @@ export default function JournalPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [linkedEmotions, setLinkedEmotions] = useState<string[]>([]);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   
   // Get emotions from context
   const { logs: allEmotions } = useEmotion();
@@ -92,6 +94,13 @@ export default function JournalPage() {
     setIsEditing(false);
   }, [currentDate]);
 
+  // Handle calendar date selection
+  const handleCalendarDateSelect = useCallback((date: Date) => {
+    setCurrentDate(date);
+    setIsEditing(false);
+    setIsCalendarOpen(false);
+  }, []);
+
   // Check if we can turn pages
   const today = new Date();
   const canTurnNext = currentDate < today;
@@ -102,6 +111,14 @@ export default function JournalPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>My Journal</h1>
         <div className={styles.actions}>
+          <button 
+            className={styles.calendarButton}
+            onClick={() => setIsCalendarOpen(true)}
+            aria-label="Open calendar to jump to date"
+            title="Jump to date"
+          >
+            📅
+          </button>
           {!isEditing && (
             <button 
               className={styles.editButton}
@@ -152,6 +169,15 @@ export default function JournalPage() {
         <p>Total entries: {entries.length}</p>
         <p>Words written today: {currentEntry?.wordCount || 0}</p>
       </div>
+
+      {/* Calendar Picker */}
+      <CalendarPicker
+        selectedDate={currentDate}
+        onDateSelect={handleCalendarDateSelect}
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        journalEntries={entries}
+      />
     </div>
   );
 }

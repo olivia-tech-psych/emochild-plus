@@ -28,6 +28,7 @@ EmoChild is a modern resurrection of the classic Tamagotchi (1996 digital pet), 
 - **Extended Type System**: Added JournalEntry, JournalPage, PromptTrack, Prompt, EmotionalPattern, ChartData, TimeRange, and AnalyticsPreferences types for advanced features
 - **JournalSpread Component**: Two-page journal interface with cozy stationery aesthetic, dark pink borders, handwriting-style font (Kalam), tilde placeholders for empty content, date headers with day-of-year display, real-time word count calculation and display, and responsive design
 - **PageCurl Component**: Animated navigation buttons for journal pages with realistic curl effects, ripple feedback, direction-specific animations, accessibility support, and reduced motion compatibility
+- **CalendarPicker Component**: Mobile-first calendar date picker for journal navigation with pastel pink color palette, bottom sheet design on mobile, swipe navigation, visual indicators for dates with journal entries, and accessibility support
 - **EmotionLinker Component**: Interactive component for connecting journal entries with same-day emotions, featuring collapsible interface, visual indicators for linked/unlinked emotions, accessibility support, and emotion metadata display
 - **Journal Utilities**: Comprehensive date calculations with leap year support, word count calculation, journal entry creation/updating, date range filtering, and CSV export functionality
 - **ExportButton Component**: User-friendly CSV export interface for journal entries with validation, loading states, error handling, export summaries, and accessibility support
@@ -55,6 +56,11 @@ emochild/
 │   │   └── setup/page.tsx           # Creature setup flow
 │   ├── components/
 │   │   ├── ActionButtons/           # Express/Suppress action buttons
+│   │   ├── CalendarPicker/          # Mobile-first calendar date picker (V3)
+│   │   │   ├── CalendarPicker.tsx
+│   │   │   ├── CalendarPicker.test.tsx
+│   │   │   ├── CalendarPicker.module.css
+│   │   │   └── index.ts
 │   │   ├── ColorPicker/             # Reusable color selector component
 │   │   ├── Creature/                # Animated creature component
 │   │   ├── EmotionInput/            # Emotion log input component
@@ -510,3 +516,69 @@ npm run test:watch
 - **Window.matchMedia Mocking**: Implemented proper test environment setup for responsive design testing with media query simulation
 - **Cross-Device Compatibility**: Enhanced test coverage to ensure consistent user experience across desktop, tablet, and mobile devices
 - Improved overall test reliability and coverage for responsive design requirements
+
+### [2025-12-19 20:00] JournalSpread Mobile Layout Optimization
+- **Mobile Layout Improvements**: Enhanced JournalSpread component CSS for better mobile device compatibility and layout stability
+- **Flexible Width Constraints**: Added `width: 100%` and `min-width: 0` properties to journal spread and page containers to allow proper shrinking on small screens
+- **Central Binding Shadow Removal**: Hidden the decorative central binding shadow on mobile devices since pages are stacked vertically rather than side-by-side
+- **Container Flexibility**: Improved responsive behavior by ensuring journal containers can adapt to available screen width without overflow issues
+- **Mobile-First Design**: Enhanced mobile user experience with optimized layout that prioritizes content readability and interaction on smaller screens
+- Addresses responsive design requirements for journal interface across all device sizes
+
+### [2025-12-19 20:15] JournalSpread Mobile Flex Layout Refinement
+- **Flex Layout Optimization**: Refined mobile responsive CSS for JournalSpread component to prevent unwanted flex shrinking behavior
+- **Page Container Fix**: Changed `.journalPage` from `min-width: 0` to `flex: none` to explicitly prevent flex shrinking on mobile devices
+- **Layout Stability**: Ensures journal pages maintain their intended dimensions and don't collapse on smaller screens
+- **CSS Cleanup**: Removed redundant `min-width: 0` comment from `.journalSpread` container for cleaner code
+- Improves mobile layout consistency and prevents layout issues with flexbox shrinking behavior
+
+### [2025-12-19 20:30] JournalSpread Mobile CSS Override Enhancement
+- **CSS Specificity Fix**: Added `!important` declarations to mobile responsive CSS for JournalSpread component to ensure proper style override
+- **Desktop Override**: Enhanced `max-width: none !important` and `width: 100% !important` properties to force override desktop max-width constraints on mobile devices
+- **Layout Consistency**: Ensures mobile layout styles take precedence over desktop styles regardless of CSS specificity conflicts
+- **Responsive Reliability**: Improves mobile layout reliability by preventing desktop styles from interfering with mobile responsive design
+- Addresses potential CSS cascade issues where desktop styles might override mobile responsive styles
+
+### [2025-12-19 20:45] JournalSpread Mobile Viewport Optimization
+- **Viewport Width Usage**: Updated JournalSpread mobile CSS to use `width: 100vw` for full viewport width utilization on mobile devices
+- **Reduced Mobile Padding**: Changed mobile padding from `var(--spacing-md)` to `var(--spacing-xs)` for more screen real estate on small devices
+- **Margin Reset**: Added `margin: 0` to journal container on mobile to eliminate any unwanted spacing that could cause horizontal scrolling
+- **Mobile Space Optimization**: Maximizes available screen space for journal content on mobile devices while maintaining readability
+- Improves mobile user experience by utilizing full screen width and reducing unnecessary padding on small screens
+
+### [2025-12-19 21:00] JournalSpread Mobile Layout Refinement
+- **Consistent Mobile Padding**: Updated mobile padding from CSS variable to fixed `8px` value for consistent small but usable padding across devices
+- **Full-Width Layout**: Added `justify-content: stretch` and `align-items: stretch` to journal container to utilize full screen width instead of centering
+- **Centered Spread**: Added `margin: 0 auto` to journal spread to center the content within the stretched container
+- **Mobile Layout Optimization**: Improved mobile responsive design to better utilize available screen space while maintaining proper content alignment
+- Enhanced mobile user experience with more predictable and consistent layout behavior on small screens
+
+### [2025-12-19 21:15] JournalSpread Mobile Detection Enhancement
+- **Mobile Detection Hook**: Added `useIsMobile` custom hook to JournalSpread component for dynamic mobile screen size detection
+- **Responsive State Management**: Implemented window resize listener to detect screen size changes and update mobile state accordingly
+- **768px Breakpoint**: Set mobile detection threshold at 768px width to align with responsive design breakpoints
+- **Dynamic Layout Adaptation**: Enhanced component's ability to adapt layout and behavior based on real-time screen size detection
+- **Performance Optimization**: Added proper cleanup of resize event listeners to prevent memory leaks
+- Improved responsive behavior and user experience across different device sizes and orientations
+
+### [2025-12-19 21:30] JournalSpread Mobile Full-Width Layout Implementation
+- **Full Viewport Width**: Implemented CSS positioning technique using `left: 50%`, `right: 50%`, `marginLeft: -50vw`, `marginRight: -50vw` to achieve true full viewport width on mobile devices
+- **Container Breakout**: Enhanced mobile layout to break out of parent container constraints and utilize complete screen width for journal interface
+- **Responsive CSS Override**: Added `!important` declarations with TypeScript type assertion to ensure mobile styles override desktop constraints
+- **Mobile Layout Positioning**: Used `position: relative` with negative margins to expand journal container beyond parent boundaries on mobile screens
+- **Improved Mobile UX**: Maximizes screen real estate utilization on mobile devices for better journal writing experience
+- Enhanced mobile responsive design to provide optimal full-screen journal interface on small devices
+
+### [2025-12-21 21:45] JournalSpread Accessibility and Mobile Label Enhancement
+- **Responsive ARIA Labels**: Updated JournalSpread component ARIA labels to be more generic and mobile-friendly
+- **Page Label Optimization**: Changed "Left journal page" to "Journal page" to better reflect responsive behavior where there's only one page on mobile
+- **Comment Clarification**: Updated component comments to clarify that the page is the main/left page on desktop but the only page on mobile devices
+- **Accessibility Improvement**: Enhanced screen reader experience by providing more accurate page descriptions across different device sizes
+- Minor accessibility enhancement for better responsive design compatibility
+
+### [2025-12-21 22:00] CalendarPicker Component CSS Refactoring
+- **CSS Color Variables Cleanup**: Removed hardcoded CSS color variables from CalendarPicker component module CSS file
+- **Global Color System Integration**: Refactored CalendarPicker to use the global CSS custom properties system instead of component-specific color variables
+- **Code Consistency**: Improved consistency with the rest of the application's color management approach
+- **Maintainability Enhancement**: Simplified color management by centralizing color definitions in the global theme system
+- Minor refactoring to improve code organization and maintainability

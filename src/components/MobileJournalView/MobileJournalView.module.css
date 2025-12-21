@@ -1,0 +1,286 @@
+/**
+ * MobileJournalView Component Styles
+ * Full-screen mobile journal writing experience
+ */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #F8E8ED; /* Soft pastel pink background */
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+  background: #F8E8ED;
+  border-bottom: 2px solid #E5C2D1;
+  flex-shrink: 0;
+  min-height: 60px;
+}
+
+.closeButton {
+  background: transparent;
+  border: 2px solid #D4567A;
+  color: #D4567A;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: #D4567A;
+  color: #F8E8ED;
+}
+
+.dateInfo {
+  flex: 1;
+  text-align: center;
+  margin: 0 var(--spacing-sm);
+}
+
+.date {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #5A3A4A;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.wordCount {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: #8B6B7A;
+  font-weight: 500;
+}
+
+.saveButton {
+  background: #D4567A;
+  color: #F8E8ED;
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 60px;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #B8456A;
+}
+
+.saveButton:disabled {
+  background: #E5C2D1;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.writingArea {
+  flex: 1;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #5A3A4A;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.textarea::placeholder {
+  color: #8B6B7A;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.emotionSection {
+  flex-shrink: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid #E5C2D1;
+  background: rgba(255, 255, 255, 0.3);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bottomActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background: #F8E8ED;
+  border-top: 2px solid #E5C2D1;
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.cancelButton {
+  background: transparent;
+  color: #D4567A;
+  border: 2px solid #D4567A;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+}
+
+.cancelButton:hover {
+  background: #D4567A;
+  color: #F8E8ED;
+}
+
+.saveInfo {
+  flex: 1;
+  text-align: center;
+}
+
+.charLimit {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  color: #8B6B7A;
+  font-style: italic;
+}
+
+.primarySaveButton {
+  background: #D4567A;
+  color: #F8E8ED;
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+  min-width: 100px;
+}
+
+.primarySaveButton:hover:not(:disabled) {
+  background: #B8456A;
+  transform: translateY(-1px);
+}
+
+.primarySaveButton:disabled {
+  background: #E5C2D1;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+  }
+  
+  .closeButton,
+  .saveButton,
+  .cancelButton,
+  .primarySaveButton {
+    transition: none;
+  }
+  
+  .primarySaveButton:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .header,
+  .bottomActions {
+    border-width: 3px;
+  }
+  
+  .closeButton,
+  .cancelButton {
+    border-width: 3px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  .header {
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 50px;
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  .wordCount {
+    font-size: 12px;
+  }
+  
+  .textarea {
+    font-size: 16px;
+  }
+  
+  .emotionSection {
+    max-height: 120px;
+  }
+  
+  .bottomActions {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
